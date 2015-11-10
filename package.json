@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "babel": {
-    "presets": ["react"]
+    "presets": [
+      "react"
+    ]
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,6 +25,7 @@
     "express": "^4.13.3",
     "flux": "^2.1.1",
     "hbs": "^4.0.0",
+    "mongoose": "^4.2.5",
     "path": "^0.12.7",
     "react": "^0.14.2",
     "react-dom": "^0.14.2"

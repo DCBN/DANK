@@ -1,8 +1,16 @@
-var Dispatcher = require('flux').Dispatcher;
 var express = require('express');
 var app = express();
 var path = require('path');
 var hbs = require('hbs');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://127.0.0.1:27017/infobase');
+mongoose.model('users', {name: String});
+app.get('/users', function(req, res) {
+	mongoose.model('users').find(function(err, users) {
+		res.send(users);
+	});
+});
 // Views Directory
 app.set('views', path.join(__dirname, 'views'));
 
