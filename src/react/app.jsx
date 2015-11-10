@@ -1,9 +1,5 @@
-'use strict'
-
 var React = require('react');
-var Test = require('./Test');
+var ReactDOM = require('react-dom');
+var HelloWorld = require('./hello-world');
 
-var wrap = document.getElementById('wrapper');
-if (wrap) {
-	React.render(<Test />, document.getElementById('wrapper'));
-}
+ReactDOM.render(<HelloWorld />, document.getElementById('wrap'));
