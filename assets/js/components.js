@@ -48,7 +48,12 @@
 	var ReactDOM = __webpack_require__(2);
 	var HelloWorld = __webpack_require__(148);
 
-	ReactDOM.render(React.createElement(HelloWorld, null), document.getElementById('wrap'));
+	ReactDOM.render(React.createElement(HelloWorld, {
+	  __source: {
+	    fileName: '../../../src/js/app.jsx',
+	    lineNumber: 5
+	  }
+	}), document.getElementById('wrap'));
 
 /***/ },
 /* 1 */
@@ -18655,10 +18660,17 @@
 	var React = __webpack_require__(1);
 
 	var HelloWorld = React.createClass({
+		displayName: 'HelloWorld',
+
 		render: function () {
 			return React.createElement(
 				'h1',
-				null,
+				{
+					__source: {
+						fileName: '../../../src/js/components/hello-world.jsx',
+						lineNumber: 6
+					}
+				},
 				' It actually works '
 			);
 		}

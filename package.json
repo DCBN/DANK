@@ -33,6 +33,7 @@
   "devDependencies": {
     "babel-core": "^6.1.2",
     "babel-loader": "^6.1.0",
+    "babel-preset-react": "^6.1.4",
     "gulp": "^3.9.0",
     "webpack": "^1.12.3"
   }

@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 
 module.exports = {
-		entry: './src/react/app.jsx',	
+		entry: './src/js/app.jsx',	
 		output: {
 			filename: 'components.js',
 			path: './assets/js',
