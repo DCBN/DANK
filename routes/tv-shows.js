@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = function(app) {
-	app.route('/')
+	app.route('/tvshows')
 	.get(function(req, res, next) {
-		res.render('index', { title: 'Initial page' });
+		res.render('tv-shows', { title: 'TV-Shows' });
 	});
 }

@@ -1,0 +1,96 @@
+@import "./includes/meyer-reset";
+@import "./includes/fonts";
+
+html, body, #wrapper
+{
+	height: 100%;
+	width: 100%;
+	background: #15AFFF;
+	overflow: hidden;
+}
+
+#landingWrap
+{
+	height: 100%;
+	width: 100%;
+	background: url('../img/img-2.jpg');
+	background-size: cover;
+}
+
+.landing-container
+{
+	height: 100%;
+	width: 100%;
+	
+	.banner
+	{
+		height: 10%;
+		width: 100%;
+		background: rgba(0, 0, 0, 0.7);
+		position: absolute;
+		top: 50%;
+		left: 0;
+		text-align: center;
+		//transform: translate(0, -50%);
+		opacity: 0;
+		color: white;
+		font-family: 'Lato', sans-serif;
+		h1 {
+			font-size: 72px;
+		}	
+	}
+
+	.btn
+	{
+		height: 50px;
+		width: 125px;
+		opacity: 0;
+		border: none;
+		border-radius: 10px;
+		padding: 0;
+		transition: .4s ease;
+		text-align: center;
+		position: absolute;
+		top: 65%;
+		left: 50%;
+		font-family: 'Lato', sans-serif;
+		text-decoration: none;
+
+		&:before {
+			content: "";
+			display: inline-block;
+			height: 50px;
+			vertical-align: middle;
+		}
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	#movies
+	{
+		background-color: transparent;
+		color: #1f5aa6;
+		border: 2px solid #1f5aa6;
+		margin-left: -150px;
+		&:hover {
+			background-color: #1f5aa6;
+			color: white;
+			//transition: .2s ease;
+		}
+	}
+
+	#tvshows
+	{
+		background-color: transparent;
+		color: #9cb6d9;
+		border: 2px solid #9cb6d9;
+		margin-right: -150px;
+		&:hover {
+			background-color: #9cb6d9;
+			color: white;
+			//transition: .2s ease;
+		}
+	}
+}

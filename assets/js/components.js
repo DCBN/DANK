@@ -46,14 +46,24 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
-	var HelloWorld = __webpack_require__(148);
+	var Landing = __webpack_require__(148);
+	var TVShows = __webpack_require__(149);
+	var Movies = __webpack_require__(150);
 
-	ReactDOM.render(React.createElement(HelloWorld, {
-	  __source: {
-	    fileName: '../../../src/js/app.jsx',
-	    lineNumber: 5
-	  }
-	}), document.getElementById('wrap'));
+	var landingWrap = document.getElementById('landingWrap');
+	if (landingWrap) {
+		ReactDOM.render(React.createElement(Landing, null), document.getElementById('landingWrap'));
+	}
+
+	var TvShowWrap = document.getElementById('TvShowWrap');
+	if (TvShowWrap) {
+		ReactDOM.render(React.createElement(TVShows, null), document.getElementById('TvShowWrap'));
+	}
+
+	var MovieWrap = document.getElementById('MovieWrap');
+	if (MovieWrap) {
+		ReactDOM.render(React.createElement(Movies, null), document.getElementById('MovieWrap'));
+	}
 
 /***/ },
 /* 1 */
@@ -18658,25 +18668,94 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
 
-	var HelloWorld = React.createClass({
-		displayName: 'HelloWorld',
+	var Landing = React.createClass({
+		displayName: 'LandingPage',
 
 		render: function () {
 			return React.createElement(
-				'h1',
-				{
-					__source: {
-						fileName: '../../../src/js/components/hello-world.jsx',
-						lineNumber: 6
-					}
-				},
-				' It actually works '
+				'div',
+				{ className: 'landing-container' },
+				React.createElement(
+					'div',
+					{ className: 'banner' },
+					React.createElement(
+						'h1',
+						null,
+						'DANK'
+					),
+					React.createElement(
+						'p',
+						null,
+						'Your movie queue for netflix '
+					)
+				),
+				React.createElement(
+					'a',
+					{ id: 'movies', className: 'btn', href: '/movies' },
+					' Movies '
+				),
+				React.createElement(
+					'a',
+					{ id: 'tvshows', className: 'btn', href: '/tvshows' },
+					' TV Shows '
+				)
 			);
 		}
 	});
 
-	module.exports = HelloWorld;
+	module.exports = Landing;
+
+/***/ },
+/* 149 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var TVShows = React.createClass({
+		displayName: 'TV-Shows',
+
+		render: function () {
+			return React.createElement(
+				'div',
+				{ className: 'TvShowWrap' },
+				React.createElement(
+					'h1',
+					null,
+					' TV-Shows '
+				)
+			);
+		}
+	});
+
+	module.exports = TVShows;
+
+/***/ },
+/* 150 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var Movies = React.createClass({
+		displayName: 'Movies',
+
+		render: function () {
+			return React.createElement(
+				'div',
+				{ className: 'MovieWrap' },
+				React.createElement(
+					'h1',
+					null,
+					' Movies '
+				)
+			);
+		}
+	});
+
+	module.exports = Movies;
 
 /***/ }
 /******/ ]);

@@ -23,7 +23,10 @@ hbs.registerPartials(__dirname + '/views/partials');
 // Directory for static data (assets)
 app.use(express.static(path.join(__dirname, 'assets')));
 
-require('./routes/index.js')(app);
+//Routes
+require('./routes/landing.js')(app);
+require('./routes/movies.js')(app);
+require('./routes/tv-shows.js')(app);
 
 var server = app.listen(1337, function () {
   var host = server.address().address;
