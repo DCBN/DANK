@@ -8,6 +8,7 @@ var TVShows = React.createClass({
 		return (
 			<div className="TvShowWrap">
 				<h1> TV-Shows </h1>
+				<div> Hello </div>
 			</div>
 		);
 	}

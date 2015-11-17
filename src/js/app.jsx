@@ -9,12 +9,12 @@ if(landingWrap){
 	ReactDOM.render(<Landing />, document.getElementById('landingWrap'));
 }
 
-var TvShowWrap = document.getElementById('TvShowWrap');
-if(TvShowWrap){
-	ReactDOM.render(<TVShows />, document.getElementById('TvShowWrap'));
+var TvShowContainer = document.getElementById('tvshow-container');
+if(TvShowContainer){
+	ReactDOM.render(<TVShows />, document.getElementById('tvshow-container'));
 }
 
-var MovieWrap = document.getElementById('MovieWrap');
-if(MovieWrap){
-	ReactDOM.render(<Movies />, document.getElementById('MovieWrap'));
+var MovieContainer = document.getElementById('movie-container');
+if(MovieContainer){
+	ReactDOM.render(<Movies />, document.getElementById('movie-container'));
 }

@@ -55,14 +55,14 @@
 		ReactDOM.render(React.createElement(Landing, null), document.getElementById('landingWrap'));
 	}
 
-	var TvShowWrap = document.getElementById('TvShowWrap');
-	if (TvShowWrap) {
-		ReactDOM.render(React.createElement(TVShows, null), document.getElementById('TvShowWrap'));
+	var TvShowContainer = document.getElementById('tvshow-container');
+	if (TvShowContainer) {
+		ReactDOM.render(React.createElement(TVShows, null), document.getElementById('tvshow-container'));
 	}
 
-	var MovieWrap = document.getElementById('MovieWrap');
-	if (MovieWrap) {
-		ReactDOM.render(React.createElement(Movies, null), document.getElementById('MovieWrap'));
+	var MovieContainer = document.getElementById('movie-container');
+	if (MovieContainer) {
+		ReactDOM.render(React.createElement(Movies, null), document.getElementById('movie-container'));
 	}
 
 /***/ },
@@ -18725,6 +18725,11 @@
 					'h1',
 					null,
 					' TV-Shows '
+				),
+				React.createElement(
+					'div',
+					null,
+					' Hello '
 				)
 			);
 		}
