@@ -6,9 +6,10 @@ var TVShows = React.createClass({
 
 	render: function() {
 		return (
-			<div className="TvShowWrap">
-				<h1> TV-Shows </h1>
-				<div> Hello </div>
+			<div className="jsx-wrapper">
+				<div id="left" className="side-panel"></div>
+				<div id="middle"></div>
+				<div id="right" className="side-panel"></div>
 			</div>
 		);
 	}

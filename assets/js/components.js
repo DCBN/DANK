@@ -18720,17 +18720,10 @@
 		render: function () {
 			return React.createElement(
 				'div',
-				{ className: 'TvShowWrap' },
-				React.createElement(
-					'h1',
-					null,
-					' TV-Shows '
-				),
-				React.createElement(
-					'div',
-					null,
-					' Hello '
-				)
+				{ className: 'jsx-wrapper' },
+				React.createElement('div', { id: 'left', className: 'side-panel' }),
+				React.createElement('div', { id: 'middle' }),
+				React.createElement('div', { id: 'right', className: 'side-panel' })
 			);
 		}
 	});
@@ -18743,6 +18736,7 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
+	var Categories = __webpack_require__(151);
 
 	var Movies = React.createClass({
 		displayName: 'Movies',
@@ -18750,17 +18744,143 @@
 		render: function () {
 			return React.createElement(
 				'div',
-				{ className: 'MovieWrap' },
+				{ className: 'jsx-wrapper' },
 				React.createElement(
-					'h1',
-					null,
-					' Movies '
-				)
+					'div',
+					{ id: 'left', className: 'side-panel' },
+					React.createElement(
+						'div',
+						{ className: 'logo' },
+						React.createElement(
+							'h2',
+							null,
+							'Qlist'
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'menu' },
+						React.createElement(
+							'ul',
+							null,
+							React.createElement(
+								'li',
+								{ className: 'menu-item' },
+								React.createElement(
+									'a',
+									{ href: '#' },
+									'Movies'
+								)
+							),
+							React.createElement(
+								'li',
+								{ className: 'menu-item' },
+								React.createElement(
+									'a',
+									{ href: '#' },
+									'TV-Shows'
+								)
+							)
+						)
+					),
+					React.createElement(Categories, null)
+				),
+				React.createElement(
+					'div',
+					{ id: 'middle' },
+					React.createElement('input', { type: 'search', className: 'searchbar', placeholder: 'Search...' })
+				),
+				React.createElement('div', { id: 'right', className: 'side-panel' })
 			);
 		}
 	});
 
 	module.exports = Movies;
+
+/***/ },
+/* 151 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+	var CategoryItem = __webpack_require__(152);
+
+	var Categories = React.createClass({
+		displayName: 'Categories',
+
+		getInitialState: function () {
+			return {
+				Category: []
+			};
+		},
+
+		categorySearch: function (event) {
+			if (event.which == 13 || event.keyCode == 13) {
+				this.setState({ Category: this.state.Category.concat([event.target.value]) });
+				document.getElementById("category-input").value = '';
+			} else {
+				return true;
+			}
+		},
+
+		render: function () {
+			return React.createElement(
+				'div',
+				{ className: 'categories' },
+				React.createElement(
+					'label',
+					{ className: 'category-label' },
+					' Categories '
+				),
+				React.createElement('input', { type: 'text', placeholder: 'Category', id: 'category-input', onKeyDown: this.categorySearch }),
+				React.createElement(
+					'ul',
+					{ id: 'category-list' },
+					this.state.Category.map(function (category) {
+						return React.createElement(CategoryItem, { key: category, category: category });
+					})
+				)
+			);
+		}
+	});
+
+	module.exports = Categories;
+
+/***/ },
+/* 152 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var CategoryItem = React.createClass({
+		displayName: 'CategoryItem',
+
+		getInitialState: function () {
+			return {
+				Category: this.props.category
+			};
+		},
+
+		componentWillReceiveProps: function (nextProps) {
+			this.setState({ Category: nextProps.category });
+		},
+
+		deleteCategory: function () {
+			console.log('Delete me');
+		},
+
+		render: function () {
+			return React.createElement(
+				'li',
+				{ className: 'categoryItem' },
+				this.state.Category,
+				React.createElement('i', { className: 'icon icon-times', onClick: this.deleteCategory })
+			);
+		}
+	});
+
+	module.exports = CategoryItem;
 
 /***/ }
 /******/ ]);

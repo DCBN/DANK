@@ -1,0 +1,131 @@
+html, body, #wrapper
+{
+	height: 100%;
+	width: 100%;
+	background: #15AFFF;
+	overflow: hidden;
+}
+
+.jsx-wrapper
+{
+	height: 100%;
+	width: 100%;
+}
+
+.side-panel {
+	height: 100%;
+	width: 15%;
+	background: #434A61;
+	padding-top: 25px;
+}
+
+#left {
+	float: left;
+}
+
+#right {
+	float: right;
+}
+
+#middle {
+	height: 100%;
+	width:70%;
+	background: #E5E5E5;
+	float: left;
+	.searchbar {
+		height: 50px;
+		width: 100%;
+		border: none;
+		border-bottom: 1px solid #434A61;
+		font-family: 'Lato', sans-serif;
+		font-size: 35px;
+		padding-left: 10px;
+	}
+}
+
+.logo {
+	height: 50px;
+	width: 100%;
+	text-align: center;
+	line-height: 50px;
+	h2 {
+		font-family: 'Lato', sans-serif;
+		color: white;
+		font-size: 42px;
+	}
+}
+
+.menu {
+	width: 100%;
+	margin: 20px 0 10px 0;
+
+	.menu-item {
+		box-sizing: border-box;
+		height: 40px;
+		width: 100%;
+		font-family: 'Lato', sans-serif;
+		text-align: left;
+		padding-left: 20%;
+		line-height: 40px;
+		color: #ADADAD;
+		background: #212637;
+		a {
+			text-decoration: none;
+			color: inherit;
+			display: block;
+		}
+		&:hover {
+			background: #171A25;
+			color: white;
+		}
+	}
+}
+
+.categories {
+	width: 100%;
+	text-align: center;
+	.category-label {
+		font-family: 'Lato', sans-serif;
+		font-size: 20px;
+		color: white;
+	}
+	#category-input {
+		height: 40px;
+		width: 80%;
+		border: none;
+		font-family: 'Lato', sans-serif;
+		font-weight: 300;
+		font-size: 20px;
+		transform: translate(0, 25%);
+		text-align: center;
+	}
+	#category-list {
+		width: 80%;
+		margin-top: 20px;
+		padding-left: 10%;
+		.categoryItem {
+			height: 40px;
+			width: 100%;
+			line-height: 40px;
+			color: ADADAD;
+			text-align: left;
+			font-family: 'Lato', sans-serif;
+			margin-top: 10px;
+			padding: 0 5% 0 5%;
+			background: #212637;
+			box-sizing: border-box;
+			&:hover {
+				color: white;
+				background: #171A25;
+				cursor: pointer; 
+			}
+			.icon {
+				float: right;
+				transform: translate(0, 75%);
+				&:hover {
+					color: red;
+				}
+			}
+		}
+	}
+}
