@@ -11,8 +11,8 @@ var Landing = React.createClass({
 					<h1>DANK</h1>
 					<p>Your movie queue for netflix </p>
 				</div>
-					<a id="movies" className="btn" href="/movies"> Movies </a>
-					<a id="tvshows" className="btn" href="/tvshows"> TV Shows </a>
+					<a id="facebook" className="btn" href="/auth/facebook"><i className="icon icon-facebook-official"></i> Facebook </a>
+					<a id="google" className="btn" href="/auth/google"><i className="icon icon-google-plus"></i>&nbsp; Google </a>
 			</div>
 		);
 	}

@@ -1,5 +1,29 @@
 {{>header}}
-<div id="movie-container">
-
-</div>
+	<div id="left" class="side-panel">
+		<div class="logo"><h2>Qlist</h2></div>
+		<div class="menu">
+			<ul>
+				<li class="menu-item active"><a href="#">Movies</a></li>
+				<li class="menu-item"><a href="/tvshows">TV-Shows</a></li>
+			</ul>
+		</div>
+			<div id="genres">
+			</div>
+	</div>
+			<div id="middle">
+				<input type="search" class="searchbar" placeholder="Search..."/>
+			</div>
+				<div id="right" class="side-panel">
+					<div id="user">	
+						<img id="userImage" src="{{ user.socialAccounts.picture }}"/>
+						<span id="userName">{{ user.socialAccounts.name}}</span>
+					</div>
+					<div id="playlist-container">
+						<h2> Playlists </h2>
+						<a href="#" id="create-playlist">Create new playlist</a>
+					</div>
+					<div id="logout">
+						<a href="/logout"> Logout </a>
+					</div>
+				</div>
 {{>footer}}

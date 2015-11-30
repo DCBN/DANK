@@ -47,22 +47,16 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
 	var Landing = __webpack_require__(148);
-	var TVShows = __webpack_require__(149);
-	var Movies = __webpack_require__(150);
+	var Genres = __webpack_require__(149);
 
 	var landingWrap = document.getElementById('landingWrap');
 	if (landingWrap) {
 		ReactDOM.render(React.createElement(Landing, null), document.getElementById('landingWrap'));
 	}
 
-	var TvShowContainer = document.getElementById('tvshow-container');
-	if (TvShowContainer) {
-		ReactDOM.render(React.createElement(TVShows, null), document.getElementById('tvshow-container'));
-	}
-
-	var MovieContainer = document.getElementById('movie-container');
-	if (MovieContainer) {
-		ReactDOM.render(React.createElement(Movies, null), document.getElementById('movie-container'));
+	var GenreWrap = document.getElementById('genres');
+	if (GenreWrap) {
+		ReactDOM.render(React.createElement(Genres, null), document.getElementById('genres'));
 	}
 
 /***/ },
@@ -10427,6 +10421,7 @@
 	    multiple: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
 	    muted: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
 	    name: null,
+	    nonce: MUST_USE_ATTRIBUTE,
 	    noValidate: HAS_BOOLEAN_VALUE,
 	    open: HAS_BOOLEAN_VALUE,
 	    optimum: null,
@@ -10438,6 +10433,7 @@
 	    readOnly: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
 	    rel: null,
 	    required: HAS_BOOLEAN_VALUE,
+	    reversed: HAS_BOOLEAN_VALUE,
 	    role: MUST_USE_ATTRIBUTE,
 	    rows: MUST_USE_ATTRIBUTE | HAS_POSITIVE_NUMERIC_VALUE,
 	    rowSpan: null,
@@ -18640,7 +18636,7 @@
 
 	'use strict';
 
-	module.exports = '0.14.2';
+	module.exports = '0.14.3';
 
 /***/ },
 /* 147 */
@@ -18693,13 +18689,15 @@
 				),
 				React.createElement(
 					'a',
-					{ id: 'movies', className: 'btn', href: '/movies' },
-					' Movies '
+					{ id: 'facebook', className: 'btn', href: '/auth/facebook' },
+					React.createElement('i', { className: 'icon icon-facebook-official' }),
+					' Facebook '
 				),
 				React.createElement(
 					'a',
-					{ id: 'tvshows', className: 'btn', href: '/tvshows' },
-					' TV Shows '
+					{ id: 'google', className: 'btn', href: '/auth/google' },
+					React.createElement('i', { className: 'icon icon-google-plus' }),
+					' Google '
 				)
 			);
 		}
@@ -18713,111 +18711,21 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
+	var GenreItem = __webpack_require__(150);
 
-	var TVShows = React.createClass({
-		displayName: 'TV-Shows',
-
-		render: function () {
-			return React.createElement(
-				'div',
-				{ className: 'jsx-wrapper' },
-				React.createElement('div', { id: 'left', className: 'side-panel' }),
-				React.createElement('div', { id: 'middle' }),
-				React.createElement('div', { id: 'right', className: 'side-panel' })
-			);
-		}
-	});
-
-	module.exports = TVShows;
-
-/***/ },
-/* 150 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(2);
-	var Categories = __webpack_require__(151);
-
-	var Movies = React.createClass({
-		displayName: 'Movies',
-
-		render: function () {
-			return React.createElement(
-				'div',
-				{ className: 'jsx-wrapper' },
-				React.createElement(
-					'div',
-					{ id: 'left', className: 'side-panel' },
-					React.createElement(
-						'div',
-						{ className: 'logo' },
-						React.createElement(
-							'h2',
-							null,
-							'Qlist'
-						)
-					),
-					React.createElement(
-						'div',
-						{ className: 'menu' },
-						React.createElement(
-							'ul',
-							null,
-							React.createElement(
-								'li',
-								{ className: 'menu-item' },
-								React.createElement(
-									'a',
-									{ href: '#' },
-									'Movies'
-								)
-							),
-							React.createElement(
-								'li',
-								{ className: 'menu-item' },
-								React.createElement(
-									'a',
-									{ href: '#' },
-									'TV-Shows'
-								)
-							)
-						)
-					),
-					React.createElement(Categories, null)
-				),
-				React.createElement(
-					'div',
-					{ id: 'middle' },
-					React.createElement('input', { type: 'search', className: 'searchbar', placeholder: 'Search...' })
-				),
-				React.createElement('div', { id: 'right', className: 'side-panel' })
-			);
-		}
-	});
-
-	module.exports = Movies;
-
-/***/ },
-/* 151 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(2);
-	var CategoryItem = __webpack_require__(152);
-
-	var Categories = React.createClass({
-		displayName: 'Categories',
+	var Genres = React.createClass({
+		displayName: 'Genres',
 
 		getInitialState: function () {
 			return {
-				Category: []
+				Genre: []
 			};
 		},
 
-		categorySearch: function (event) {
+		genreSearch: function (event) {
 			if (event.which == 13 || event.keyCode == 13) {
-				this.setState({ Category: this.state.Category.concat([event.target.value]) });
-				document.getElementById("category-input").value = '';
+				this.setState({ Genre: this.state.Genre.concat([event.target.value]) });
+				document.getElementById("genre-input").value = '';
 			} else {
 				return true;
 			}
@@ -18826,61 +18734,184 @@
 		render: function () {
 			return React.createElement(
 				'div',
-				{ className: 'categories' },
+				{ className: 'genres' },
 				React.createElement(
 					'label',
-					{ className: 'category-label' },
-					' Categories '
+					{ className: 'genre-label' },
+					' Genres '
 				),
-				React.createElement('input', { type: 'text', placeholder: 'Category', id: 'category-input', onKeyDown: this.categorySearch }),
+				React.createElement('input', { type: 'text', placeholder: 'Genre', id: 'genre-input', onKeyDown: this.genreSearch }),
 				React.createElement(
 					'ul',
-					{ id: 'category-list' },
-					this.state.Category.map(function (category) {
-						return React.createElement(CategoryItem, { key: category, category: category });
+					{ id: 'genre-list' },
+					this.state.Genre.map(function (genre) {
+						return React.createElement(GenreItem, { key: genre, genre: genre });
 					})
 				)
 			);
 		}
 	});
 
-	module.exports = Categories;
+	module.exports = Genres;
 
 /***/ },
-/* 152 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
+	var update = __webpack_require__(151);
 
-	var CategoryItem = React.createClass({
-		displayName: 'CategoryItem',
+	var GenreItem = React.createClass({
+		displayName: 'GenreItem',
 
 		getInitialState: function () {
 			return {
-				Category: this.props.category
+				Genre: this.props.genre
 			};
 		},
 
 		componentWillReceiveProps: function (nextProps) {
-			this.setState({ Category: nextProps.category });
+			this.setState({ Genre: nextProps.genre });
 		},
 
-		deleteCategory: function () {
+		deleteGenreItem: function (item) {
 			console.log('Delete me');
+			this.setState({
+				Genre: update(this.props.Genre, { $splice: [[item, 1]] })
+			});
 		},
 
 		render: function () {
 			return React.createElement(
 				'li',
-				{ className: 'categoryItem' },
-				this.state.Category,
-				React.createElement('i', { className: 'icon icon-times', onClick: this.deleteCategory })
+				{ className: 'genreItem' },
+				this.state.Genre,
+				React.createElement('i', { className: 'icon icon-times', onClick: this.deleteGenreItem })
 			);
 		}
 	});
 
-	module.exports = CategoryItem;
+	module.exports = GenreItem;
+
+/***/ },
+/* 151 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(152);
+
+/***/ },
+/* 152 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule update
+	 */
+
+	/* global hasOwnProperty:true */
+
+	'use strict';
+
+	var assign = __webpack_require__(39);
+	var keyOf = __webpack_require__(79);
+	var invariant = __webpack_require__(13);
+	var hasOwnProperty = ({}).hasOwnProperty;
+
+	function shallowCopy(x) {
+	  if (Array.isArray(x)) {
+	    return x.concat();
+	  } else if (x && typeof x === 'object') {
+	    return assign(new x.constructor(), x);
+	  } else {
+	    return x;
+	  }
+	}
+
+	var COMMAND_PUSH = keyOf({ $push: null });
+	var COMMAND_UNSHIFT = keyOf({ $unshift: null });
+	var COMMAND_SPLICE = keyOf({ $splice: null });
+	var COMMAND_SET = keyOf({ $set: null });
+	var COMMAND_MERGE = keyOf({ $merge: null });
+	var COMMAND_APPLY = keyOf({ $apply: null });
+
+	var ALL_COMMANDS_LIST = [COMMAND_PUSH, COMMAND_UNSHIFT, COMMAND_SPLICE, COMMAND_SET, COMMAND_MERGE, COMMAND_APPLY];
+
+	var ALL_COMMANDS_SET = {};
+
+	ALL_COMMANDS_LIST.forEach(function (command) {
+	  ALL_COMMANDS_SET[command] = true;
+	});
+
+	function invariantArrayCase(value, spec, command) {
+	  !Array.isArray(value) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'update(): expected target of %s to be an array; got %s.', command, value) : invariant(false) : undefined;
+	  var specValue = spec[command];
+	  !Array.isArray(specValue) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'update(): expected spec of %s to be an array; got %s. ' + 'Did you forget to wrap your parameter in an array?', command, specValue) : invariant(false) : undefined;
+	}
+
+	function update(value, spec) {
+	  !(typeof spec === 'object') ? process.env.NODE_ENV !== 'production' ? invariant(false, 'update(): You provided a key path to update() that did not contain one ' + 'of %s. Did you forget to include {%s: ...}?', ALL_COMMANDS_LIST.join(', '), COMMAND_SET) : invariant(false) : undefined;
+
+	  if (hasOwnProperty.call(spec, COMMAND_SET)) {
+	    !(Object.keys(spec).length === 1) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Cannot have more than one key in an object with %s', COMMAND_SET) : invariant(false) : undefined;
+
+	    return spec[COMMAND_SET];
+	  }
+
+	  var nextValue = shallowCopy(value);
+
+	  if (hasOwnProperty.call(spec, COMMAND_MERGE)) {
+	    var mergeObj = spec[COMMAND_MERGE];
+	    !(mergeObj && typeof mergeObj === 'object') ? process.env.NODE_ENV !== 'production' ? invariant(false, 'update(): %s expects a spec of type \'object\'; got %s', COMMAND_MERGE, mergeObj) : invariant(false) : undefined;
+	    !(nextValue && typeof nextValue === 'object') ? process.env.NODE_ENV !== 'production' ? invariant(false, 'update(): %s expects a target of type \'object\'; got %s', COMMAND_MERGE, nextValue) : invariant(false) : undefined;
+	    assign(nextValue, spec[COMMAND_MERGE]);
+	  }
+
+	  if (hasOwnProperty.call(spec, COMMAND_PUSH)) {
+	    invariantArrayCase(value, spec, COMMAND_PUSH);
+	    spec[COMMAND_PUSH].forEach(function (item) {
+	      nextValue.push(item);
+	    });
+	  }
+
+	  if (hasOwnProperty.call(spec, COMMAND_UNSHIFT)) {
+	    invariantArrayCase(value, spec, COMMAND_UNSHIFT);
+	    spec[COMMAND_UNSHIFT].forEach(function (item) {
+	      nextValue.unshift(item);
+	    });
+	  }
+
+	  if (hasOwnProperty.call(spec, COMMAND_SPLICE)) {
+	    !Array.isArray(value) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Expected %s target to be an array; got %s', COMMAND_SPLICE, value) : invariant(false) : undefined;
+	    !Array.isArray(spec[COMMAND_SPLICE]) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'update(): expected spec of %s to be an array of arrays; got %s. ' + 'Did you forget to wrap your parameters in an array?', COMMAND_SPLICE, spec[COMMAND_SPLICE]) : invariant(false) : undefined;
+	    spec[COMMAND_SPLICE].forEach(function (args) {
+	      !Array.isArray(args) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'update(): expected spec of %s to be an array of arrays; got %s. ' + 'Did you forget to wrap your parameters in an array?', COMMAND_SPLICE, spec[COMMAND_SPLICE]) : invariant(false) : undefined;
+	      nextValue.splice.apply(nextValue, args);
+	    });
+	  }
+
+	  if (hasOwnProperty.call(spec, COMMAND_APPLY)) {
+	    !(typeof spec[COMMAND_APPLY] === 'function') ? process.env.NODE_ENV !== 'production' ? invariant(false, 'update(): expected spec of %s to be a function; got %s.', COMMAND_APPLY, spec[COMMAND_APPLY]) : invariant(false) : undefined;
+	    nextValue = spec[COMMAND_APPLY](nextValue);
+	  }
+
+	  for (var k in spec) {
+	    if (!(ALL_COMMANDS_SET.hasOwnProperty(k) && ALL_COMMANDS_SET[k])) {
+	      nextValue[k] = update(value[k], spec[k]);
+	    }
+	  }
+
+	  return nextValue;
+	}
+
+	module.exports = update;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }
 /******/ ]);

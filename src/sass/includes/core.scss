@@ -6,21 +6,16 @@ html, body, #wrapper
 	overflow: hidden;
 }
 
-.jsx-wrapper
-{
-	height: 100%;
-	width: 100%;
-}
-
 .side-panel {
 	height: 100%;
 	width: 15%;
 	background: #434A61;
-	padding-top: 25px;
+	position: relative;
 }
 
 #left {
 	float: left;
+	padding-top: 25px;
 }
 
 #right {
@@ -33,7 +28,7 @@ html, body, #wrapper
 	background: #E5E5E5;
 	float: left;
 	.searchbar {
-		height: 50px;
+		height: 60px;
 		width: 100%;
 		border: none;
 		border-bottom: 1px solid #434A61;
@@ -57,18 +52,20 @@ html, body, #wrapper
 
 .menu {
 	width: 100%;
-	margin: 20px 0 10px 0;
+	margin: 20px 0 20px 0;
+	height: 144px;
 
 	.menu-item {
 		box-sizing: border-box;
-		height: 40px;
-		width: 100%;
+		height: 115px;
+		width: 40%;
 		font-family: 'Lato', sans-serif;
-		text-align: left;
-		padding-left: 20%;
-		line-height: 40px;
+		text-align: center;
 		color: #ADADAD;
 		background: #212637;
+		float: left;
+		line-height: 115px;
+		transform: translate(25%, 0);
 		a {
 			text-decoration: none;
 			color: inherit;
@@ -79,17 +76,24 @@ html, body, #wrapper
 			color: white;
 		}
 	}
+	.active {
+			background: #171A25;
+			color: white;
+		}
 }
 
-.categories {
+#genres {
+	width: 100%;
+	margin-top: 10px;
+	.genres {
 	width: 100%;
 	text-align: center;
-	.category-label {
+	.genre-label {
 		font-family: 'Lato', sans-serif;
 		font-size: 20px;
 		color: white;
 	}
-	#category-input {
+	#genre-input {
 		height: 40px;
 		width: 80%;
 		border: none;
@@ -99,15 +103,15 @@ html, body, #wrapper
 		transform: translate(0, 25%);
 		text-align: center;
 	}
-	#category-list {
+	#genre-list {
 		width: 80%;
 		margin-top: 20px;
 		padding-left: 10%;
-		.categoryItem {
+		.genreItem {
 			height: 40px;
 			width: 100%;
 			line-height: 40px;
-			color: ADADAD;
+			color: #ADADAD;
 			text-align: left;
 			font-family: 'Lato', sans-serif;
 			margin-top: 10px;
@@ -127,5 +131,78 @@ html, body, #wrapper
 				}
 			}
 		}
+	}
+}
+}
+
+#user {
+	width: 100%;
+	height: 60px;
+	padding-left: 40px;
+	margin: none;
+	box-sizing: border-box;
+	line-height: 60px;
+	img {
+		border-radius: 50px;
+		height: 50px;
+		width: 50px;
+		margin-top: 5px;
+		float:left;
+	}
+	#userName {
+		font-size: 25px;
+		color: white;
+		font-family: 'Lato', sans-serif;
+		font-weight: 300;
+		margin-left: 20px;
+	}
+
+	&:hover {
+		background: #171A25;
+		cursor: pointer;
+	}
+}
+
+#playlist-container {
+	width: 100%;
+	height: 150px;
+	margin-top: 50px;
+	text-align: center;
+	h2 {
+		font-family: 'Lato', sans-serif;
+		font-size: 20px;
+		color: white;
+		margin-bottom: 20px;
+	}
+	#create-playlist {
+		font-family: 'Lato', sans-serif;
+		font-size: 15px;
+		color: white;
+		text-decoration: none;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+#logout {
+	height: 60px;
+	width: 100%;
+	text-align: center;
+	line-height: 60px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	background: #ED5252;
+	a {
+		color: white;
+		text-decoration: none;
+		font-size: 25px;
+		font-family: 'Lato', sans-serif;
+		font-weight: 300;
+		display: block;
+	}
+	&:hover {
+		background: #FD3636;
 	}
 }
