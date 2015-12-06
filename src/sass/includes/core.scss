@@ -27,14 +27,23 @@ html, body, #wrapper
 	width:70%;
 	background: #E5E5E5;
 	float: left;
-	.searchbar {
+	#searchWrap {
 		height: 60px;
 		width: 100%;
-		border: none;
-		border-bottom: 1px solid #434A61;
-		font-family: 'Lato', sans-serif;
-		font-size: 35px;
-		padding-left: 10px;
+		.searchbar {
+			height: 100%;
+			width: 100%;
+			border: none;
+			border-bottom: 1px solid #434A61;
+			font-family: 'Lato', sans-serif;
+			font-size: 35px;
+			padding-left: 10px;
+		}
+	}
+	#contentWrap {
+		height: calc(100% - 60px);
+		width: 100%;
+		background: gray;
 	}
 }
 
@@ -54,7 +63,6 @@ html, body, #wrapper
 	width: 100%;
 	margin: 20px 0 20px 0;
 	height: 144px;
-
 	.menu-item {
 		box-sizing: border-box;
 		height: 115px;

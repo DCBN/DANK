@@ -48,6 +48,8 @@
 	var ReactDOM = __webpack_require__(2);
 	var Landing = __webpack_require__(148);
 	var Genres = __webpack_require__(149);
+	var Content = __webpack_require__(153);
+	var Search = __webpack_require__(154);
 
 	var landingWrap = document.getElementById('landingWrap');
 	if (landingWrap) {
@@ -57,6 +59,16 @@
 	var GenreWrap = document.getElementById('genres');
 	if (GenreWrap) {
 		ReactDOM.render(React.createElement(Genres, null), document.getElementById('genres'));
+	}
+
+	var ContentWrap = document.getElementById('contentWrap');
+	if (ContentWrap) {
+		ReactDOM.render(React.createElement(Content, null), document.getElementById('contentWrap'));
+	}
+
+	var SearchWrap = document.getElementById('searchWrap');
+	if (SearchWrap) {
+		ReactDOM.render(React.createElement(Search, null), document.getElementById('searchWrap'));
 	}
 
 /***/ },
@@ -18697,7 +18709,7 @@
 					'a',
 					{ id: 'google', className: 'btn', href: '/auth/google' },
 					React.createElement('i', { className: 'icon icon-google-plus' }),
-					' Google '
+					'  Google '
 				)
 			);
 		}
@@ -18912,6 +18924,103 @@
 
 	module.exports = update;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 153 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+	var Item = __webpack_require__(155);
+
+	var Content = React.createClass({
+		displayName: 'Content',
+
+		getIntitialState: function () {
+			return {
+				trending: []
+			};
+		},
+
+		componentWillMount: function () {
+			this.setState({ title: 'Hello nigguh' });
+			var apikey = '2b3cd597f318362b41a80c63bef6f5b291b271447605f768752b2225e3b88e72';
+			$.ajax({
+				type: 'GET',
+				beforeSend: function (req) {
+					req.setRequestHeader('trakt-api-key', apikey);
+				},
+				url: 'https://api-v2launch.trakt.tv/movies/trending',
+				dataType: 'json',
+				success: (function (data) {
+					this.setState({
+						trending: data
+					});
+				}).bind(this)
+			});
+		},
+
+		render: function () {
+			if (!this.state.trending) return false;
+			return React.createElement(
+				'div',
+				{ className: 'something' },
+				this.state.trending.map(function (list) {
+					console.log(list);
+					return React.createElement(Item, { title: list.movie.title, key: list.movie.ids.trakt });
+				})
+			);
+		}
+	});
+
+	module.exports = Content;
+
+/***/ },
+/* 154 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var Search = React.createClass({
+		displayName: 'Search',
+		render: function () {
+			return React.createElement('input', { type: 'search', className: 'searchbar', placeholder: 'Search...' });
+		}
+	});
+
+	module.exports = Search;
+
+/***/ },
+/* 155 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var Item = React.createClass({
+		displayName: 'Item',
+
+		getIntitialState: function () {
+			return {
+				title: this.props.title
+			};
+		},
+
+		componentWillReceiveProps: function (nextProps) {
+			console.log(nextProps);
+		},
+
+		render: function () {
+			return React.createElement(
+				'div',
+				{ className: 'item' },
+				this.props.title
+			);
+		}
+	});
+
+	module.exports = Item;
 
 /***/ }
 /******/ ]);

@@ -7,7 +7,9 @@ var app = express();
 var path = require('path');
 var hbs = require('hbs');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
 var passport = require('passport');
 
 mongoose.connect('mongodb://127.0.0.1:' + process.env.DB_PORT + '/' + process.env.DB_NAME);
@@ -24,9 +26,23 @@ hbs.registerPartials(__dirname + '/views/partials');
 // Directory for static data (assets)
 app.use(express.static(path.join(__dirname, 'assets')));
 
-app.use(session({secret: 'verysecretstring',
-				saveUninitialized: true,
-				resave: true}));
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
+
+app.use(cookieParser());
+
+app.use(session({
+		secret: 'verysecretstring',
+		saveUninitialized: true,
+		resave: true,
+		cookie: {
+			httpOnly: true,
+			maxAge: 1000 * 2630000 * 5 // 5 months
+		}
+	}));
 
 app.use(passport.initialize());
 app.use(passport.session());
