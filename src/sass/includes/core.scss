@@ -44,6 +44,38 @@ html, body, #wrapper
 		height: calc(100% - 60px);
 		width: 100%;
 		background: gray;
+		overflow-y: scroll;
+		.movielist {
+			height: 100%;
+			width: 100%;
+			.movieItem {
+				height: 20%;
+				width: 100%;
+				background-size: cover;
+				background-position: 0, -50px;
+				background-repeat: no-repeat;
+				.movieImage {
+					height: 100%;
+					width: 10%;
+					float:left;
+					background-size: cover;
+				}
+				h1 {
+					font-size: 45px;
+					color: white;
+					font-family: 'Lato', sans-serif;
+					//text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+					text-shadow: 0px 3px 2px rgba(0, 0, 0, 1);
+					margin-left: 10px;
+				}
+
+				.movieGenres {
+					color: white;
+					font-family: 'Lato', sans-serif;
+					text-shadow: 0px 3px 2px rgba(0, 0, 0, 1);
+				}
+			}
+		}
 	}
 }
 

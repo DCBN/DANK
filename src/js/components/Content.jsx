@@ -19,7 +19,7 @@ var Content = React.createClass({
 			beforeSend: function(req){
 				req.setRequestHeader('trakt-api-key', apikey);
 			},
-			url: 'https://api-v2launch.trakt.tv/movies/trending',
+			url: 'https://api-v2launch.trakt.tv/movies/trending?extended=full,images',
 			dataType: 'json',
 			success: function(data) {
 				this.setState({
@@ -32,11 +32,11 @@ var Content = React.createClass({
 	render: function() {
 		if(!this.state.trending) return false;
 		return (
-			<div className="something">	
+			<div className="movielist">	
 				{
 					this.state.trending.map(function(list){
 						console.log(list);
-						return <Item title={list.movie.title} key={list.movie.ids.trakt}/>;
+						return <Item movie={list.movie} key={list.movie.ids.trakt}/>;
 					})
 				}
 			</div>

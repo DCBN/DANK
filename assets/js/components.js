@@ -49,7 +49,7 @@
 	var Landing = __webpack_require__(148);
 	var Genres = __webpack_require__(149);
 	var Content = __webpack_require__(153);
-	var Search = __webpack_require__(154);
+	var Search = __webpack_require__(155);
 
 	var landingWrap = document.getElementById('landingWrap');
 	if (landingWrap) {
@@ -18931,7 +18931,7 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
-	var Item = __webpack_require__(155);
+	var Item = __webpack_require__(154);
 
 	var Content = React.createClass({
 		displayName: 'Content',
@@ -18950,7 +18950,7 @@
 				beforeSend: function (req) {
 					req.setRequestHeader('trakt-api-key', apikey);
 				},
-				url: 'https://api-v2launch.trakt.tv/movies/trending',
+				url: 'https://api-v2launch.trakt.tv/movies/trending?extended=full,images',
 				dataType: 'json',
 				success: (function (data) {
 					this.setState({
@@ -18964,10 +18964,10 @@
 			if (!this.state.trending) return false;
 			return React.createElement(
 				'div',
-				{ className: 'something' },
+				{ className: 'movielist' },
 				this.state.trending.map(function (list) {
 					console.log(list);
-					return React.createElement(Item, { title: list.movie.title, key: list.movie.ids.trakt });
+					return React.createElement(Item, { movie: list.movie, key: list.movie.ids.trakt });
 				})
 			);
 		}
@@ -18982,14 +18982,62 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
 
-	var Search = React.createClass({
-		displayName: 'Search',
+	var Item = React.createClass({
+		displayName: 'Item',
+
 		render: function () {
-			return React.createElement('input', { type: 'search', className: 'searchbar', placeholder: 'Search...' });
+			var style = {
+				backgroundImage: 'url(' + this.props.movie.images.fanart.full + ')'
+			};
+			var poster = {
+				backgroundImage: 'url(' + this.props.movie.images.poster.full + ')'
+			};
+			return React.createElement(
+				'div',
+				{ className: 'movieItem', style: style },
+				React.createElement('div', { className: 'movieImage', style: poster }),
+				React.createElement(
+					'div',
+					{ className: 'top' },
+					React.createElement(
+						'h1',
+						null,
+						this.props.movie.title
+					),
+					React.createElement(
+						'span',
+						null,
+						' (' + this.props.movie.year + ')'
+					),
+					React.createElement(
+						'span',
+						{ className: 'movieGenres' },
+						' ',
+						this.props.movie.genres.join(', ')
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'center' },
+					React.createElement(
+						'span',
+						{ className: 'movieGenres' },
+						' ',
+						this.props.movie.certification
+					),
+					React.createElement(
+						'span',
+						{ className: 'movieGenres' },
+						' ',
+						this.props.movie.runtime + ' min',
+						' '
+					)
+				)
+			);
 		}
 	});
 
-	module.exports = Search;
+	module.exports = Item;
 
 /***/ },
 /* 155 */
@@ -18998,29 +19046,14 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
 
-	var Item = React.createClass({
-		displayName: 'Item',
-
-		getIntitialState: function () {
-			return {
-				title: this.props.title
-			};
-		},
-
-		componentWillReceiveProps: function (nextProps) {
-			console.log(nextProps);
-		},
-
+	var Search = React.createClass({
+		displayName: 'Search',
 		render: function () {
-			return React.createElement(
-				'div',
-				{ className: 'item' },
-				this.props.title
-			);
+			return React.createElement('input', { type: 'search', className: 'searchbar', placeholder: 'Search...' });
 		}
 	});
 
-	module.exports = Item;
+	module.exports = Search;
 
 /***/ }
 /******/ ]);
