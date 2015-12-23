@@ -6,17 +6,14 @@ var Item = React.createClass({
 
 
 	render: function() {
-		var style = {
-			backgroundImage: 'url(' + this.props.movie.images.fanart.full + ')'
-		};
 		var poster = {
 			backgroundImage: 'url(' + this.props.movie.images.poster.full + ')'
 		}
 		return (
-			<div className="movieItem" style={style}>
+			<div className="movieItem">
 				<div className="movieImage" style={poster}></div>
 				<div className="top">
-					<h1>{this.props.movie.title}</h1><span>{' (' +  this.props.movie.year + ')'}</span>
+					<h1>{this.props.title}</h1><span>{' (' +  this.props.movie.year + ')'}</span>
 					<span className="movieGenres"> {this.props.movie.genres.join(', ')}</span>
 				</div>
 				<div className="center">

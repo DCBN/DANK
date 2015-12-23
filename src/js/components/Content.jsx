@@ -4,15 +4,13 @@ var Item = require('./Item');
 
 var Content = React.createClass({
 	displayName: 'Content',
-		
-	getIntitialState: function() {
+	getInitialState: function(){
 		return {
 			trending: []
-		};
+		}
 	},
 
 	componentWillMount: function(){
-		this.setState({title: 'Hello nigguh'});
 		var apikey = '2b3cd597f318362b41a80c63bef6f5b291b271447605f768752b2225e3b88e72';
 		$.ajax({
 			type: 'GET',
@@ -35,7 +33,6 @@ var Content = React.createClass({
 			<div className="movielist">	
 				{
 					this.state.trending.map(function(list){
-						console.log(list);
 						return <Item movie={list.movie} key={list.movie.ids.trakt}/>;
 					})
 				}

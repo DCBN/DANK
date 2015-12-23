@@ -49,7 +49,7 @@
 	var Landing = __webpack_require__(148);
 	var Genres = __webpack_require__(149);
 	var Content = __webpack_require__(153);
-	var Search = __webpack_require__(155);
+	var Search = __webpack_require__(154);
 
 	var landingWrap = document.getElementById('landingWrap');
 	if (landingWrap) {
@@ -18931,19 +18931,17 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
-	var Item = __webpack_require__(154);
+	var Item = __webpack_require__(155);
 
 	var Content = React.createClass({
 		displayName: 'Content',
-
-		getIntitialState: function () {
+		getInitialState: function () {
 			return {
 				trending: []
 			};
 		},
 
 		componentWillMount: function () {
-			this.setState({ title: 'Hello nigguh' });
 			var apikey = '2b3cd597f318362b41a80c63bef6f5b291b271447605f768752b2225e3b88e72';
 			$.ajax({
 				type: 'GET',
@@ -18966,7 +18964,6 @@
 				'div',
 				{ className: 'movielist' },
 				this.state.trending.map(function (list) {
-					console.log(list);
 					return React.createElement(Item, { movie: list.movie, key: list.movie.ids.trakt });
 				})
 			);
@@ -18982,19 +18979,32 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
 
+	var Search = React.createClass({
+		displayName: 'Search',
+		render: function () {
+			return React.createElement('input', { type: 'search', className: 'searchbar', placeholder: 'Search...' });
+		}
+	});
+
+	module.exports = Search;
+
+/***/ },
+/* 155 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
 	var Item = React.createClass({
 		displayName: 'Item',
 
 		render: function () {
-			var style = {
-				backgroundImage: 'url(' + this.props.movie.images.fanart.full + ')'
-			};
 			var poster = {
 				backgroundImage: 'url(' + this.props.movie.images.poster.full + ')'
 			};
 			return React.createElement(
 				'div',
-				{ className: 'movieItem', style: style },
+				{ className: 'movieItem' },
 				React.createElement('div', { className: 'movieImage', style: poster }),
 				React.createElement(
 					'div',
@@ -19002,7 +19012,7 @@
 					React.createElement(
 						'h1',
 						null,
-						this.props.movie.title
+						this.props.title
 					),
 					React.createElement(
 						'span',
@@ -19038,22 +19048,6 @@
 	});
 
 	module.exports = Item;
-
-/***/ },
-/* 155 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(2);
-
-	var Search = React.createClass({
-		displayName: 'Search',
-		render: function () {
-			return React.createElement('input', { type: 'search', className: 'searchbar', placeholder: 'Search...' });
-		}
-	});
-
-	module.exports = Search;
 
 /***/ }
 /******/ ]);
