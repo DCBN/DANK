@@ -5,6 +5,7 @@ var Genres = require('./components/Genres');
 var Content = require('./components/Content');
 var Search = require('./components/Search');
 
+
 var landingWrap =  document.getElementById('landingWrap');
 if(landingWrap){
 	ReactDOM.render(<Landing />, document.getElementById('landingWrap'));
