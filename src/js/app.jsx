@@ -4,6 +4,7 @@ var Landing = require('./components/landing');
 var Genres = require('./components/Genres');
 var Content = require('./components/Content');
 var Search = require('./components/Search');
+var Playlist = require('./components/Playlist');
 
 
 var landingWrap =  document.getElementById('landingWrap');
@@ -25,4 +26,9 @@ if(ContentWrap){
 var SearchWrap = document.getElementById('searchWrap');
 if(SearchWrap){
 	ReactDOM.render(<Search />, document.getElementById('searchWrap'));
+}
+
+var PlaylistWrap = document.getElementById('playlist');
+if(PlaylistWrap){
+	ReactDOM.render(<Playlist />, document.getElementById('playlist'))
 }

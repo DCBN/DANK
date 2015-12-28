@@ -9,61 +9,41 @@ var SearchStore = require('../stores/search-store');
 var Content = React.createClass({
 	displayName: 'Content',
 	getInitialState: function(){
-		return {
-			results: [],
-			error: ''
-		}
+		actions.trending();
+		return SearchStore.getTrending();
 	},
-
 	componentDidMount: function(){
 		{/*SearchStore.on(actionConstants.GET_TRENDING, this.waiting());*/}
-		SearchStore.on(actionConstants.TRENDING_RESULT, this.loadResults());
-		SearchStore.on(actionConstants.ERROR, this.showError());
+		SearchStore.addChangeListener(this.loadResults);
+		SearchStore.addChangeListener(this.showError);
 	},
 
 	componentWillUnmount: function(){
 		{/*SearchStore.on(actionConstants.GET_TRENDING, this.waiting());*/}
-		SearchStore.removeListener(actionConstants.TRENDING_RESULT, this.loadResults());
-		SearchStore.removeListener(actionConstants.ERROR, this.showError());
+		SearchStore.removeListener(this.loadResults);
+		SearchStore.removeListener(this.showError);
 	},
 
 	loadResults: function() {
-		this.setState({
-			results: SearchStore.getTrending()
-		});
-		console.log(this.state.results);
+		this.setState(SearchStore.getTrending());
 	},
 
 	showError: function() {
-		this.setState({
-			error: SearchStore.getError(),
-			results: ''
-		});
-		console.log(this.state.error);
-	},
-
-	waiting: function() {
-		actions.trending();
-		this.setState({results: 'Waiting...'})
+		this.setState(SearchStore.getError())
 	},
 
 	render: function() {
-		{/*if(!this.state.trending) return false;
+		if(!this.state.list) return false;
 		return (
 			<div className="movielist">	
 				{
-					this.state.trending.map(function(list){
-						return <Item movie={list.movie} key={list.movie.ids.trakt}/>;
+					this.state.list.map(function(item){
+						return <Item movie={item.movie} key={item.movie.ids.trakt}/>;
 					})
 				}
 			</div>
 		);
-	*/}
-	return (
-		<div><button onClick={this.waiting}/>
-		</div>
-	)
-}
+	}
 });
 
 module.exports = Content;

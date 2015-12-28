@@ -21,7 +21,8 @@ var userSchema = mongoose.Schema({
 		email: String,
 		name: String,
 		picture: String,
-		socialNetwork: String
+		socialNetwork: String,
+		playlists: []
 	}
 });
 

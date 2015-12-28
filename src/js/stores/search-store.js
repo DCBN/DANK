@@ -1,31 +1,39 @@
 'use strict';
 
 var dispatcher = require('../dispatcher/dispatcher');
-var EventEmitter = require('eventemitter3');
-var eventEmitter = new EventEmitter();
+var EventEmitter = require('events').EventEmitter;
+var ObjectAssign = require('object-assign');
 var actionConstants = require('../constants/actionConstants');
 
-var results = null;
+var _store = {
+	list: [],
+	error: [],
+	genres: [],
+	playlists: []
+}
 var resultErrors = null;
+var CHANGE_EVENT = 'change';
 
-var SearchStore = {
+var SearchStore = ObjectAssign( {}, EventEmitter.prototype, {
 	getTrending: function() {
-		console.log(this.results);
-		return JSON.stringify(results);	
+		return _store;
 	},
 	getError: function() {
-		return resultErrors;
+		return _store;
 	},
-	emit: function(event) {
-		eventEmitter.on(event);
+	addChangeListener: function(callback){
+		this.on(CHANGE_EVENT, callback);
 	},
-	on: function(event, callback) {
-		eventEmitter.on(event, callback);
+	removeListener: function(callback) {
+		this.removeListener(CHANGE_EVENT, callback);
 	},
-	removeListener: function(event, callback) {
-		eventEmitter.removeListener(event, callback);
+	getGenres: function() {
+		return _store;
+	},
+	getPlaylists: function() {
+		return _store;
 	}
-};
+});
 
 dispatcher.register(function(action){
 	switch (action.actionType) {
@@ -33,14 +41,45 @@ dispatcher.register(function(action){
 			SearchStore.emit(actionConstants.GET_TRENDING);
 			break;*/
 		case actionConstants.TRENDING_RESULT:
-			results = action.results;
+			action.results.map(function(item){
+				_store.list.push(item);
+			});
 			resultErrors = null;
-			SearchStore.emit(actionConstants.TRENDING_RESULT);
+			SearchStore.emit(CHANGE_EVENT);
+			break;
+		case actionConstants.SEARCH_RESULT:
+			_store.list = [];
+			console.log(_store.list);
+			action.results.map(function(item){
+				_store.list.push(item);
+			});
+			resultErrors = null;
+			SearchStore.emit(CHANGE_EVENT);
 			break;
 		case actionConstants.ERROR:
 			results = null;
-			resultErrors = action.error;
-			SearchStore.emit(actionsConstants.ERROR);
+			_store.error.push(action.error);
+			SearchStore.emit(CHANGE_EVENT);
+			break;
+		case actionConstants.ADD_GENRE:
+			_store.genres.push(action.index);
+			SearchStore.emit(CHANGE_EVENT);
+			break;
+		case actionConstants.REMOVE_GENRE:
+			_store.genres = _store.genres.filter(function(index){
+				return index !== action.index;
+			});
+			console.log(_store.genres);
+			SearchStore.emit(CHANGE_EVENT);
+			break;
+		case actionConstants.SAVE_PLAYLIST:
+			var playlists = {
+				"name": action.index,
+				"items": {}
+			}
+			;
+			_store.playlists.push(playlists);
+			SearchStore.emit(CHANGE_EVENT);
 			break;
 		default:
 			//fgt

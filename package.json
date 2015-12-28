@@ -25,6 +25,7 @@
     "body-parser": "^1.14.1",
     "cookie-parser": "^1.4.0",
     "dotenv": "^1.2.0",
+    "eventemitter3": "^1.1.1",
     "express": "^4.13.3",
     "express-session": "^1.12.1",
     "flux": "^2.1.1",
@@ -36,7 +37,8 @@
     "path": "^0.12.7",
     "react": "^0.14.3",
     "react-addons-update": "^0.14.3",
-    "react-dom": "^0.14.3"
+    "react-dom": "^0.14.3",
+    "superagent": "^1.6.1"
   },
   "devDependencies": {
     "babel-core": "^6.1.2",

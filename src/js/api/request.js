@@ -20,9 +20,9 @@ var buildRequest = function(apiMethod){
 		})
 		.end(function(error, result){
 			if(error) {
-			reject(error);
+				reject(error);
 			} else {
-			resolve(result.body);
+				resolve(result.body);
 			}
 		});
 	});	

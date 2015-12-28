@@ -2,7 +2,7 @@ html, body, #wrapper
 {
 	height: 100%;
 	width: 100%;
-	background: #15AFFF;
+	background: #6F7AA0;
 	overflow: hidden;
 }
 
@@ -10,12 +10,10 @@ html, body, #wrapper
 	height: 100%;
 	width: 15%;
 	background: #434A61;
-	position: relative;
 }
 
 #left {
 	float: left;
-	padding-top: 25px;
 }
 
 #right {
@@ -24,13 +22,14 @@ html, body, #wrapper
 
 #middle {
 	height: 100%;
-	width:70%;
+	width:85%;
 	background: #E5E5E5;
 	float: left;
+	overflow: hidden;
 	#searchWrap {
 		height: 60px;
 		width: 100%;
-		.searchbar {
+		#searchbar {
 			height: 100%;
 			width: 100%;
 			border: none;
@@ -43,37 +42,44 @@ html, body, #wrapper
 	#contentWrap {
 		height: calc(100% - 60px);
 		width: 100%;
-		background: gray;
-		overflow-y: scroll;
+		background: #DADADA;
+		overflow: auto;
+		padding-left: 2.5%;
 		.movielist {
 			height: 100%;
 			width: 100%;
 			.movieItem {
-				height: 20%;
-				width: 100%;
+				height: 275px;
+				width: 200px;
 				background-size: cover;
 				background-position: 0, -50px;
 				background-repeat: no-repeat;
-				border-bottom: 3px solid white;
-				.movieImage {
+				float: left;
+				margin: 10px 10px 10px 10px;
+				cursor: pointer;
+				.itemInfo {
 					height: 100%;
-					width: 10%;
-					float:left;
-					background-size: cover;
-				}
-				h1 {
-					font-size: 45px;
-					color: white;
+					width: 100%;
+					background: rgba(0,0,0,0.5);
+					opacity: 0;
+					color: white; 
 					font-family: 'Lato', sans-serif;
-					//text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-					text-shadow: 0px 3px 2px rgba(0, 0, 0, 1);
-					margin-left: 10px;
-				}
+					text-align: center;
+					padding: 10px 10px 10px 10px;
+					box-sizing: border-box;
+					float: none;
+					&:hover {
+						opacity: 1;
+					}
 
-				.movieGenres {
-					color: white;
-					font-family: 'Lato', sans-serif;
-					text-shadow: 0px 3px 2px rgba(0, 0, 0, 1);
+					.itemTitle {
+						font-size: 1.2rem;
+						font-weight: 600;
+					}
+
+					.itemSection {
+						margin: 10px 0;
+					}
 				}
 			}
 		}
@@ -81,10 +87,17 @@ html, body, #wrapper
 }
 
 .logo {
-	height: 50px;
-	width: 100%;
+	height: 60px;
+	width: 15%;
 	text-align: center;
-	line-height: 50px;
+	line-height: 60px;
+	position: absolute;;
+	bottom: 60px;
+	left: 0;
+	&:hover {
+		background: #171A25;
+	}
+
 	h2 {
 		font-family: 'Lato', sans-serif;
 		color: white;
@@ -228,12 +241,12 @@ html, body, #wrapper
 
 #logout {
 	height: 60px;
-	width: 100%;
+	width: 15%;
 	text-align: center;
 	line-height: 60px;
 	position: absolute;
 	bottom: 0;
-	right: 0;
+	right: left;
 	background: #ED5252;
 	a {
 		color: white;
@@ -245,5 +258,50 @@ html, body, #wrapper
 	}
 	&:hover {
 		background: #FD3636;
+	}
+}
+
+#playlist-creator-container {
+	height: 100%;
+	width: 100%;
+	background: rgba(0,0,0,0.5);
+	position: absolute;
+	top: 0;
+	left: 0;
+ 	z-index: 999;
+	display:block;
+	#creatorBody {
+		height: 20%;
+		width: 40%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		background: white;
+		transform: translate(-50%, -50%);
+		border-radius: 7px;
+		text-align: center;
+		padding: 10px 10px 10px 10px;
+		h2 {
+			color: #006BA8;
+			font-size: 30px;
+			font-family: 'Lato', sans-serif;
+			font-weight: 900;
+		}
+		#playlistInput {
+			height: 50px;
+			width: 300px;;
+			border: 2px solid #006BA8;
+			border-radius: 7px;
+			text-align: center;
+			margin-bottom: 20px;
+		}
+		#playlistSave {
+			height: 100px;
+			width: 125px;
+			border: none;
+			border-radius: 10px;
+			padding: 0;
+			background: #02B73E;
+		}
 	}
 }

@@ -48,47 +48,33 @@
 	var ReactDOM = __webpack_require__(2);
 	var Landing = __webpack_require__(148);
 	var Genres = __webpack_require__(149);
-	var Content = __webpack_require__(153);
-	var Search = __webpack_require__(154);
+	var Content = __webpack_require__(165);
+	var Search = __webpack_require__(167);
+	var Playlist = __webpack_require__(168);
 
 	var landingWrap = document.getElementById('landingWrap');
 	if (landingWrap) {
-		ReactDOM.render(React.createElement(Landing, {
-			__source: {
-				fileName: '../../../src/js/app.jsx',
-				lineNumber: 11
-			}
-		}), document.getElementById('landingWrap'));
+		ReactDOM.render(React.createElement(Landing, null), document.getElementById('landingWrap'));
 	}
 
 	var GenreWrap = document.getElementById('genres');
 	if (GenreWrap) {
-		ReactDOM.render(React.createElement(Genres, {
-			__source: {
-				fileName: '../../../src/js/app.jsx',
-				lineNumber: 17
-			}
-		}), document.getElementById('genres'));
+		ReactDOM.render(React.createElement(Genres, null), document.getElementById('genres'));
 	}
 
 	var ContentWrap = document.getElementById('contentWrap');
 	if (ContentWrap) {
-		ReactDOM.render(React.createElement(Content, {
-			__source: {
-				fileName: '../../../src/js/app.jsx',
-				lineNumber: 22
-			}
-		}), document.getElementById('contentWrap'));
+		ReactDOM.render(React.createElement(Content, null), document.getElementById('contentWrap'));
 	}
 
 	var SearchWrap = document.getElementById('searchWrap');
 	if (SearchWrap) {
-		ReactDOM.render(React.createElement(Search, {
-			__source: {
-				fileName: '../../../src/js/app.jsx',
-				lineNumber: 27
-			}
-		}), document.getElementById('searchWrap'));
+		ReactDOM.render(React.createElement(Search, null), document.getElementById('searchWrap'));
+	}
+
+	var PlaylistWrap = document.getElementById('playlist');
+	if (PlaylistWrap) {
+		ReactDOM.render(React.createElement(Playlist, null), document.getElementById('playlist'));
 	}
 
 /***/ },
@@ -18704,65 +18690,31 @@
 		render: function () {
 			return React.createElement(
 				'div',
-				{ className: 'landing-container', __source: {
-						fileName: '../../../src/js/components/landing.jsx',
-						lineNumber: 9
-					}
-				},
+				{ className: 'landing-container' },
 				React.createElement(
 					'div',
-					{ className: 'banner', __source: {
-							fileName: '../../../src/js/components/landing.jsx',
-							lineNumber: 10
-						}
-					},
+					{ className: 'banner' },
 					React.createElement(
 						'h1',
-						{
-							__source: {
-								fileName: '../../../src/js/components/landing.jsx',
-								lineNumber: 11
-							}
-						},
+						null,
 						'DANK'
 					),
 					React.createElement(
 						'p',
-						{
-							__source: {
-								fileName: '../../../src/js/components/landing.jsx',
-								lineNumber: 12
-							}
-						},
+						null,
 						'Your movie queue for netflix '
 					)
 				),
 				React.createElement(
 					'a',
-					{ id: 'facebook', className: 'btn', href: '/auth/facebook', __source: {
-							fileName: '../../../src/js/components/landing.jsx',
-							lineNumber: 14
-						}
-					},
-					React.createElement('i', { className: 'icon icon-facebook-official', __source: {
-							fileName: '../../../src/js/components/landing.jsx',
-							lineNumber: 14
-						}
-					}),
+					{ id: 'facebook', className: 'btn', href: '/auth/facebook' },
+					React.createElement('i', { className: 'icon icon-facebook-official' }),
 					' Facebook '
 				),
 				React.createElement(
 					'a',
-					{ id: 'google', className: 'btn', href: '/auth/google', __source: {
-							fileName: '../../../src/js/components/landing.jsx',
-							lineNumber: 15
-						}
-					},
-					React.createElement('i', { className: 'icon icon-google-plus', __source: {
-							fileName: '../../../src/js/components/landing.jsx',
-							lineNumber: 15
-						}
-					}),
+					{ id: 'google', className: 'btn', href: '/auth/google' },
+					React.createElement('i', { className: 'icon icon-google-plus' }),
 					'  Google '
 				)
 			);
@@ -18779,59 +18731,53 @@
 	var ReactDOM = __webpack_require__(2);
 	var GenreItem = __webpack_require__(150);
 
+	var actions = __webpack_require__(153);
+	var actionConstants = __webpack_require__(163);
+	var SearchStore = __webpack_require__(164);
+
 	var Genres = React.createClass({
 		displayName: 'Genres',
 
 		getInitialState: function () {
-			return {
-				Genre: []
-			};
+			return SearchStore.getGenres();
+		},
+
+		componentDidMount: function () {
+			SearchStore.addChangeListener(this.loadGenres);
+		},
+
+		componentWillUnmount: function () {
+			SearchStore.removeListener(this.loadGenres);
 		},
 
 		genreSearch: function (event) {
 			if (event.which == 13 || event.keyCode == 13) {
-				this.setState({ Genre: this.state.Genre.concat([event.target.value]) });
+				actions.addGenre(event.target.value);
 				document.getElementById("genre-input").value = '';
 			} else {
 				return true;
 			}
 		},
+		loadGenres: function () {
+			this.setState(SearchStore.getGenres());
+		},
 
 		render: function () {
+			if (!this.state.genres) return false;
 			return React.createElement(
 				'div',
-				{ className: 'genres', __source: {
-						fileName: '../../../src/js/components/Genres.jsx',
-						lineNumber: 25
-					}
-				},
+				{ className: 'genres' },
 				React.createElement(
 					'label',
-					{ className: 'genre-label', __source: {
-							fileName: '../../../src/js/components/Genres.jsx',
-							lineNumber: 26
-						}
-					},
+					{ className: 'genre-label' },
 					' Genres '
 				),
-				React.createElement('input', { type: 'text', placeholder: 'Genre', id: 'genre-input', onKeyDown: this.genreSearch, __source: {
-						fileName: '../../../src/js/components/Genres.jsx',
-						lineNumber: 27
-					}
-				}),
+				React.createElement('input', { type: 'text', placeholder: 'Genre', id: 'genre-input', onKeyDown: this.genreSearch }),
 				React.createElement(
 					'ul',
-					{ id: 'genre-list', __source: {
-							fileName: '../../../src/js/components/Genres.jsx',
-							lineNumber: 28
-						}
-					},
-					this.state.Genre.map(function (genre) {
-						return React.createElement(GenreItem, { key: genre, genre: genre, __source: {
-								fileName: '../../../src/js/components/Genres.jsx',
-								lineNumber: 31
-							}
-						});
+					{ id: 'genre-list' },
+					this.state.genres.map(function (genre) {
+						return React.createElement(GenreItem, { key: genre, genre: genre });
 					})
 				)
 			);
@@ -18848,6 +18794,8 @@
 	var ReactDOM = __webpack_require__(2);
 	var update = __webpack_require__(151);
 
+	var actions = __webpack_require__(153);
+
 	var GenreItem = React.createClass({
 		displayName: 'GenreItem',
 
@@ -18861,27 +18809,16 @@
 			this.setState({ Genre: nextProps.genre });
 		},
 
-		deleteGenreItem: function (item) {
-			console.log('Delete me');
-			this.setState({
-				Genre: update(this.props.Genre, { $splice: [[item, 1]] })
-			});
+		_delete: function () {
+			actions.removeGenre(this.props.genre);
 		},
 
 		render: function () {
 			return React.createElement(
 				'li',
-				{ className: 'genreItem', __source: {
-						fileName: '../../../src/js/components/GenreItem.jsx',
-						lineNumber: 28
-					}
-				},
+				{ className: 'genreItem' },
 				this.state.Genre,
-				React.createElement('i', { className: 'icon icon-times', onClick: this.deleteGenreItem, __source: {
-						fileName: '../../../src/js/components/GenreItem.jsx',
-						lineNumber: 29
-					}
-				})
+				React.createElement('i', { className: 'icon icon-times', onClick: this._delete })
 			);
 		}
 	});
@@ -19011,214 +18948,11 @@
 /* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(2);
-	var Item = __webpack_require__(155);
-
-	var actions = __webpack_require__(156);
-	var actionConstants = __webpack_require__(166);
-	var SearchStore = __webpack_require__(167);
-
-	var Content = React.createClass({
-		displayName: 'Content',
-		getInitialState: function () {
-			return {
-				results: [],
-				error: ''
-			};
-		},
-
-		componentDidMount: function () {
-			{/*SearchStore.on(actionConstants.GET_TRENDING, this.waiting());*/}
-			SearchStore.on(actionConstants.TRENDING_RESULT, this.loadResults());
-			SearchStore.on(actionConstants.ERROR, this.showError());
-		},
-
-		componentWillUnmount: function () {
-			{/*SearchStore.on(actionConstants.GET_TRENDING, this.waiting());*/}
-			SearchStore.removeListener(actionConstants.TRENDING_RESULT, this.loadResults());
-			SearchStore.removeListener(actionConstants.ERROR, this.showError());
-		},
-
-		loadResults: function () {
-			this.setState({
-				results: SearchStore.getTrending()
-			});
-			console.log(this.state.results);
-		},
-
-		showError: function () {
-			this.setState({
-				error: SearchStore.getError(),
-				results: ''
-			});
-			console.log(this.state.error);
-		},
-
-		waiting: function () {
-			actions.trending();
-			this.setState({ results: 'Waiting...' });
-		},
-
-		render: function () {
-			{/*if(!this.state.trending) return false;
-	   return (
-	   <div className="movielist">	
-	   	{
-	   		this.state.trending.map(function(list){
-	   			return <Item movie={list.movie} key={list.movie.ids.trakt}/>;
-	   		})
-	   	}
-	   </div>
-	   );
-	   */}
-			return React.createElement(
-				'div',
-				{
-					__source: {
-						fileName: '../../../src/js/components/Content.jsx',
-						lineNumber: 63
-					}
-				},
-				React.createElement('button', { onClick: this.waiting, __source: {
-						fileName: '../../../src/js/components/Content.jsx',
-						lineNumber: 63
-					}
-				})
-			);
-		}
-	});
-
-	module.exports = Content;
-
-/***/ },
-/* 154 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(2);
-
-	var Search = React.createClass({
-		displayName: 'Search',
-		render: function () {
-			return React.createElement('input', { type: 'search', className: 'searchbar', placeholder: 'Search...', __source: {
-					fileName: '../../../src/js/components/Search.jsx',
-					lineNumber: 8
-				}
-			});
-		}
-	});
-
-	module.exports = Search;
-
-/***/ },
-/* 155 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(2);
-
-	var Item = React.createClass({
-		displayName: 'Item',
-
-		render: function () {
-			var poster = {
-				backgroundImage: 'url(' + this.props.movie.images.poster.full + ')'
-			};
-			return React.createElement(
-				'div',
-				{ className: 'movieItem', __source: {
-						fileName: '../../../src/js/components/Item.jsx',
-						lineNumber: 13
-					}
-				},
-				React.createElement('div', { className: 'movieImage', style: poster, __source: {
-						fileName: '../../../src/js/components/Item.jsx',
-						lineNumber: 14
-					}
-				}),
-				React.createElement(
-					'div',
-					{ className: 'top', __source: {
-							fileName: '../../../src/js/components/Item.jsx',
-							lineNumber: 15
-						}
-					},
-					React.createElement(
-						'h1',
-						{
-							__source: {
-								fileName: '../../../src/js/components/Item.jsx',
-								lineNumber: 16
-							}
-						},
-						this.props.title
-					),
-					React.createElement(
-						'span',
-						{
-							__source: {
-								fileName: '../../../src/js/components/Item.jsx',
-								lineNumber: 16
-							}
-						},
-						' (' + this.props.movie.year + ')'
-					),
-					React.createElement(
-						'span',
-						{ className: 'movieGenres', __source: {
-								fileName: '../../../src/js/components/Item.jsx',
-								lineNumber: 17
-							}
-						},
-						' ',
-						this.props.movie.genres.join(', ')
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'center', __source: {
-							fileName: '../../../src/js/components/Item.jsx',
-							lineNumber: 19
-						}
-					},
-					React.createElement(
-						'span',
-						{ className: 'movieGenres', __source: {
-								fileName: '../../../src/js/components/Item.jsx',
-								lineNumber: 20
-							}
-						},
-						' ',
-						this.props.movie.certification
-					),
-					React.createElement(
-						'span',
-						{ className: 'movieGenres', __source: {
-								fileName: '../../../src/js/components/Item.jsx',
-								lineNumber: 21
-							}
-						},
-						' ',
-						this.props.movie.runtime + ' min',
-						' '
-					)
-				)
-			);
-		}
-	});
-
-	module.exports = Item;
-
-/***/ },
-/* 156 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
-	var api = __webpack_require__(157);
-	var dispatcher = __webpack_require__(162);
-	var actionConstants = __webpack_require__(166);
+	var api = __webpack_require__(154);
+	var dispatcher = __webpack_require__(159);
+	var actionConstants = __webpack_require__(163);
 
 	var actions = {
 		trending: function () {
@@ -19231,10 +18965,46 @@
 					results: result
 				});
 			}, function (error) {
+				console.log(error);
 				dispatcher.dispatch({
 					actionType: actionConstants.ERROR,
 					error: error
 				});
+			});
+		},
+		search: function (query) {
+			/*dispatcher.dispatch({
+	                actionType: actionConstants.GET_TRENDING
+	         });*/
+			api.search(query).then(function (result) {
+				dispatcher.dispatch({
+					actionType: actionConstants.SEARCH_RESULT,
+					results: result
+				});
+			}, function (error) {
+				console.log(error);
+				dispatcher.dispatch({
+					actionType: actionConstants.ERROR,
+					error: error
+				});
+			});
+		},
+		addGenre: function (genre) {
+			dispatcher.dispatch({
+				actionType: actionConstants.ADD_GENRE,
+				index: genre
+			});
+		},
+		removeGenre: function (genre) {
+			dispatcher.dispatch({
+				actionType: actionConstants.REMOVE_GENRE,
+				index: genre
+			});
+		},
+		savePlaylist: function (name) {
+			dispatcher.dispatch({
+				actionType: actionConstants.SAVE_PLAYLIST,
+				index: name
 			});
 		}
 	};
@@ -19242,28 +19012,31 @@
 	module.exports = actions;
 
 /***/ },
-/* 157 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var request = __webpack_require__(158);
+	var request = __webpack_require__(155);
 
 	var api = {
 		trending: function () {
-			return request.get('/movies/trending');
+			return request.get('/movies/trending?extended=full,images&limit=28');
+		},
+		search: function (query) {
+			return request.get('search?query=' + query + '&type=movie&extended=full,images&limit=24');
 		}
 	};
 
 	module.exports = api;
 
 /***/ },
-/* 158 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var request = __webpack_require__(159);
+	var request = __webpack_require__(156);
 
 	var API_URL = 'https://api-v2launch.trakt.tv/';
 	var HEADERS = {
@@ -19295,15 +19068,15 @@
 	};
 
 /***/ },
-/* 159 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var Emitter = __webpack_require__(160);
-	var reduce = __webpack_require__(161);
+	var Emitter = __webpack_require__(157);
+	var reduce = __webpack_require__(158);
 
 	/**
 	 * Root reference for iframes.
@@ -20502,7 +20275,7 @@
 
 
 /***/ },
-/* 160 */
+/* 157 */
 /***/ function(module, exports) {
 
 	
@@ -20672,7 +20445,7 @@
 
 
 /***/ },
-/* 161 */
+/* 158 */
 /***/ function(module, exports) {
 
 	
@@ -20701,17 +20474,17 @@
 	};
 
 /***/ },
-/* 162 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var AppDispatcher = __webpack_require__(163).Dispatcher;
+	var AppDispatcher = __webpack_require__(160).Dispatcher;
 
 	module.exports = new AppDispatcher();
 
 /***/ },
-/* 163 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20723,11 +20496,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Dispatcher = __webpack_require__(164);
+	module.exports.Dispatcher = __webpack_require__(161);
 
 
 /***/ },
-/* 164 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -20749,7 +20522,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(165);
+	var invariant = __webpack_require__(162);
 
 	var _prefix = 'ID_';
 
@@ -20964,7 +20737,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 165 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -21019,51 +20792,62 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 166 */
+/* 163 */
 /***/ function(module, exports) {
 
 	'use strict';
 
-	module.exports = {
+	module.exports = Object.freeze({
 		GET_TRENDING: 'GET_TRENDING',
 		TRENDING_RESULT: 'TRENDING_RESULT',
 		GET_SEARCH: 'GET_SEARCH',
 		SEARCH_RESULT: 'SEARCH_RESULT',
-		ERROR: 'ERROR'
-	};
+		ERROR: 'ERROR',
+		ADD_GENRE: 'ADD_GENRE',
+		REMOVE_GENRE: 'REMOVE_GENRE',
+		SAVE_PLAYLIST: 'SAVE_PLAYLIST'
+	});
 
 /***/ },
-/* 167 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var dispatcher = __webpack_require__(162);
-	var EventEmitter = __webpack_require__(168);
-	var eventEmitter = new EventEmitter();
-	var actionConstants = __webpack_require__(166);
+	var dispatcher = __webpack_require__(159);
+	var EventEmitter = __webpack_require__(170).EventEmitter;
+	var ObjectAssign = __webpack_require__(171);
+	var actionConstants = __webpack_require__(163);
 
-	var results = null;
+	var _store = {
+		list: [],
+		error: [],
+		genres: [],
+		playlists: []
+	};
 	var resultErrors = null;
+	var CHANGE_EVENT = 'change';
 
-	var SearchStore = {
+	var SearchStore = ObjectAssign({}, EventEmitter.prototype, {
 		getTrending: function () {
-			console.log(this.results);
-			return JSON.stringify(results);
+			return _store;
 		},
 		getError: function () {
-			return resultErrors;
+			return _store;
 		},
-		emit: function (event) {
-			eventEmitter.on(event);
+		addChangeListener: function (callback) {
+			this.on(CHANGE_EVENT, callback);
 		},
-		on: function (event, callback) {
-			eventEmitter.on(event, callback);
+		removeListener: function (callback) {
+			this.removeListener(CHANGE_EVENT, callback);
 		},
-		removeListener: function (event, callback) {
-			eventEmitter.removeListener(event, callback);
+		getGenres: function () {
+			return _store;
+		},
+		getPlaylists: function () {
+			return _store;
 		}
-	};
+	});
 
 	dispatcher.register(function (action) {
 		switch (action.actionType) {
@@ -21071,14 +20855,44 @@
 	  	SearchStore.emit(actionConstants.GET_TRENDING);
 	  	break;*/
 			case actionConstants.TRENDING_RESULT:
-				results = action.results;
+				action.results.map(function (item) {
+					_store.list.push(item);
+				});
 				resultErrors = null;
-				SearchStore.emit(actionConstants.TRENDING_RESULT);
+				SearchStore.emit(CHANGE_EVENT);
+				break;
+			case actionConstants.SEARCH_RESULT:
+				_store.list = [];
+				console.log(_store.list);
+				action.results.map(function (item) {
+					_store.list.push(item);
+				});
+				resultErrors = null;
+				SearchStore.emit(CHANGE_EVENT);
 				break;
 			case actionConstants.ERROR:
 				results = null;
-				resultErrors = action.error;
-				SearchStore.emit(actionsConstants.ERROR);
+				_store.error.push(action.error);
+				SearchStore.emit(CHANGE_EVENT);
+				break;
+			case actionConstants.ADD_GENRE:
+				_store.genres.push(action.index);
+				SearchStore.emit(CHANGE_EVENT);
+				break;
+			case actionConstants.REMOVE_GENRE:
+				_store.genres = _store.genres.filter(function (index) {
+					return index !== action.index;
+				});
+				console.log(_store.genres);
+				SearchStore.emit(CHANGE_EVENT);
+				break;
+			case actionConstants.SAVE_PLAYLIST:
+				var playlists = {
+					"name": action.index,
+					"items": {}
+				};
+				_store.playlists.push(playlists);
+				SearchStore.emit(CHANGE_EVENT);
 				break;
 			default:
 			//fgt
@@ -21088,271 +20902,639 @@
 	module.exports = SearchStore;
 
 /***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+	var Item = __webpack_require__(166);
+
+	var actions = __webpack_require__(153);
+	var actionConstants = __webpack_require__(163);
+	var SearchStore = __webpack_require__(164);
+
+	var Content = React.createClass({
+		displayName: 'Content',
+		getInitialState: function () {
+			actions.trending();
+			return SearchStore.getTrending();
+		},
+		componentDidMount: function () {
+			{/*SearchStore.on(actionConstants.GET_TRENDING, this.waiting());*/}
+			SearchStore.addChangeListener(this.loadResults);
+			SearchStore.addChangeListener(this.showError);
+		},
+
+		componentWillUnmount: function () {
+			{/*SearchStore.on(actionConstants.GET_TRENDING, this.waiting());*/}
+			SearchStore.removeListener(this.loadResults);
+			SearchStore.removeListener(this.showError);
+		},
+
+		loadResults: function () {
+			this.setState(SearchStore.getTrending());
+		},
+
+		showError: function () {
+			this.setState(SearchStore.getError());
+		},
+
+		render: function () {
+			if (!this.state.list) return false;
+			return React.createElement(
+				'div',
+				{ className: 'movielist' },
+				this.state.list.map(function (item) {
+					return React.createElement(Item, { movie: item.movie, key: item.movie.ids.trakt });
+				})
+			);
+		}
+	});
+
+	module.exports = Content;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var Item = React.createClass({
+		displayName: 'Item',
+
+		render: function () {
+			if (this.props.movie.certification == "" || typeof this.props.movie.genres === "undefined") {
+				this.props.movie.certification = "";
+			} else {
+				var fixedCertification = this.props.movie.certification + " | ";
+			}
+			if (this.props.movie.runtime == "" || typeof this.props.movie.runtime === "undefined") {
+				this.props.movie.runtime = "";
+			} else {
+				var fixedRuntime = this.props.movie.runtime + ' min' + ' | ';
+			}
+			if (this.props.movie.year == "" || typeof this.props.movie.year === "undefined") {
+				this.props.movie.year = "";
+			} else {
+				var fixedYear = this.props.movie.year;
+			}
+			if (this.props.movie.genres == "" || typeof this.props.movie.genres === "undefined") {
+				this.props.movie.genres = "";
+			} else {
+				var fixedGenres = 'Genres: ' + this.props.movie.genres.join(', ');
+			}
+			if (!this.props.movie.images.poster.full) {
+				var poster = {
+					backgroundImage: 'url(../img/poster-not-found.png)'
+				};
+			} else {
+				var poster = {
+					backgroundImage: 'url(' + this.props.movie.images.poster.full + ')'
+				};
+			}
+
+			return React.createElement(
+				'div',
+				{ className: 'movieItem', style: poster },
+				React.createElement(
+					'div',
+					{ className: 'itemInfo' },
+					React.createElement(
+						'div',
+						{ className: 'itemSection' },
+						React.createElement(
+							'span',
+							{ className: 'itemTitle' },
+							this.props.movie.title
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'itemSection' },
+						React.createElement(
+							'span',
+							{ className: 'itemFacts' },
+							fixedCertification,
+							fixedRuntime,
+							fixedYear
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'itemSection' },
+						React.createElement(
+							'span',
+							{ className: 'itemGenres' },
+							fixedGenres
+						)
+					)
+				)
+			);
+		}
+	});
+
+	module.exports = Item;
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var actions = __webpack_require__(153);
+	var actionConstants = __webpack_require__(163);
+	var SearchStore = __webpack_require__(164);
+
+	var Search = React.createClass({
+		displayName: 'Search',
+		prepareSearch: function (event) {
+			if (event.which == 13 || event.keyCode == 13) {
+				var searchString = event.target.value.split(' ').join('+');
+				actions.search(searchString);
+				document.getElementById("searchbar").value = '';
+			} else {
+				return true;
+			}
+		},
+		render: function () {
+			return React.createElement('input', { type: 'search', id: 'searchbar', placeholder: 'Search...', onKeyDown: this.prepareSearch });
+		}
+	});
+
+	module.exports = Search;
+
+/***/ },
 /* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+	var PlaylistCreator = __webpack_require__(169);
+	var SearchStore = __webpack_require__(164);
 
-	//
-	// We store our EE objects in a plain object whose properties are event names.
-	// If `Object.create(null)` is not supported we prefix the event names with a
-	// `~` to make sure that the built-in object properties are not overridden or
-	// used as an attack vector.
-	// We also assume that `Object.create(null)` is available when the event name
-	// is an ES6 Symbol.
-	//
-	var prefix = typeof Object.create !== 'function' ? '~' : false;
+	var Playlist = React.createClass({
+		displayName: 'Playlist',
+		getInitialState: function () {
+			SearchStore.getPlaylists();
+			return {
+				showCreator: false
+			};
+		},
 
-	/**
-	 * Representation of a single EventEmitter function.
-	 *
-	 * @param {Function} fn Event handler to be called.
-	 * @param {Mixed} context Context for function execution.
-	 * @param {Boolean} once Only emit once
-	 * @api private
-	 */
-	function EE(fn, context, once) {
-	  this.fn = fn;
-	  this.context = context;
-	  this.once = once || false;
+		componentDidMount: function () {
+			SearchStore.addChangeListener(this.loadPlaylists);
+		},
+
+		componentWillUnmount: function () {
+			SearchStore.removeListener(this.loadPlaylists);
+		},
+
+		loadPlaylists: function () {
+			this.setState(SearchStore.getPlaylists());
+		},
+		_playlistCreator: function () {
+			this.setState({ showCreator: true });
+		},
+		_close: function () {
+			this.setState({ showCreator: false });
+		},
+		render: function () {
+			if (!this.state.playlists) return false;
+			return React.createElement(
+				'div',
+				{ id: 'playlist-container' },
+				React.createElement(
+					'h2',
+					null,
+					' Playlists '
+				),
+				this.state.playlists.map(function (item) {
+					return React.createElement(
+						'li',
+						{ className: 'genreItem' },
+						item.name
+					);
+				}),
+				React.createElement(
+					'a',
+					{ href: '#', id: 'create-playlist', onClick: this._playlistCreator },
+					'Create new playlist'
+				),
+				this.state.showCreator ? React.createElement(PlaylistCreator, { close: this._close }) : null
+			);
+		}
+	});
+
+	module.exports = Playlist;
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var actions = __webpack_require__(153);
+	var actionConstants = __webpack_require__(163);
+	var SearchStore = __webpack_require__(164);
+
+	var PlaylistCreator = React.createClass({
+		displayName: 'PlaylistCreator',
+		_playlistSave: function () {
+			var playlistName = document.getElementById('playlistInput').value.trim();
+			actions.savePlaylist(playlistName);
+		},
+		render: function () {
+			return React.createElement(
+				'div',
+				{ id: 'playlist-creator-container' },
+				React.createElement(
+					'div',
+					{ id: 'creatorBody' },
+					React.createElement(
+						'div',
+						{ id: 'creatorTop' },
+						React.createElement(
+							'h2',
+							null,
+							' Create new playlist '
+						)
+					),
+					React.createElement(
+						'div',
+						{ id: 'creatorMid' },
+						React.createElement('input', { id: 'playlistInput', type: 'text', placeholder: 'Name of playlist' })
+					),
+					React.createElement(
+						'div',
+						{ id: 'creatorBottom' },
+						React.createElement(
+							'a',
+							{ id: 'playlistSave', className: 'btn', onClick: this._playlistSave },
+							' Save '
+						),
+						React.createElement(
+							'a',
+							{ id: 'playlistCancel', className: 'btn', onClick: this.props.close },
+							' Cancel '
+						)
+					)
+				)
+			);
+		}
+	});
+
+	module.exports = PlaylistCreator;
+
+/***/ },
+/* 170 */
+/***/ function(module, exports) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	function EventEmitter() {
+	  this._events = this._events || {};
+	  this._maxListeners = this._maxListeners || undefined;
 	}
+	module.exports = EventEmitter;
 
-	/**
-	 * Minimal EventEmitter interface that is molded against the Node.js
-	 * EventEmitter interface.
-	 *
-	 * @constructor
-	 * @api public
-	 */
-	function EventEmitter() { /* Nothing to set */ }
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
 
-	/**
-	 * Holds the assigned EventEmitters by name.
-	 *
-	 * @type {Object}
-	 * @private
-	 */
 	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
 
-	/**
-	 * Return a list of assigned event listeners.
-	 *
-	 * @param {String} event The events that should be listed.
-	 * @param {Boolean} exists We only need to know if there are listeners.
-	 * @returns {Array|Boolean}
-	 * @api public
-	 */
-	EventEmitter.prototype.listeners = function listeners(event, exists) {
-	  var evt = prefix ? prefix + event : event
-	    , available = this._events && this._events[evt];
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
 
-	  if (exists) return !!available;
-	  if (!available) return [];
-	  if (available.fn) return [available.fn];
-
-	  for (var i = 0, l = available.length, ee = new Array(l); i < l; i++) {
-	    ee[i] = available[i].fn;
-	  }
-
-	  return ee;
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+	  if (!isNumber(n) || n < 0 || isNaN(n))
+	    throw TypeError('n must be a positive number');
+	  this._maxListeners = n;
+	  return this;
 	};
 
-	/**
-	 * Emit an event to all registered event listeners.
-	 *
-	 * @param {String} event The name of the event.
-	 * @returns {Boolean} Indication if we've emitted an event.
-	 * @api public
-	 */
-	EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
-	  var evt = prefix ? prefix + event : event;
+	EventEmitter.prototype.emit = function(type) {
+	  var er, handler, len, args, i, listeners;
 
-	  if (!this._events || !this._events[evt]) return false;
+	  if (!this._events)
+	    this._events = {};
 
-	  var listeners = this._events[evt]
-	    , len = arguments.length
-	    , args
-	    , i;
-
-	  if ('function' === typeof listeners.fn) {
-	    if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
-
-	    switch (len) {
-	      case 1: return listeners.fn.call(listeners.context), true;
-	      case 2: return listeners.fn.call(listeners.context, a1), true;
-	      case 3: return listeners.fn.call(listeners.context, a1, a2), true;
-	      case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
-	      case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
-	      case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
-	    }
-
-	    for (i = 1, args = new Array(len -1); i < len; i++) {
-	      args[i - 1] = arguments[i];
-	    }
-
-	    listeners.fn.apply(listeners.context, args);
-	  } else {
-	    var length = listeners.length
-	      , j;
-
-	    for (i = 0; i < length; i++) {
-	      if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true);
-
-	      switch (len) {
-	        case 1: listeners[i].fn.call(listeners[i].context); break;
-	        case 2: listeners[i].fn.call(listeners[i].context, a1); break;
-	        case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
-	        default:
-	          if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
-	            args[j - 1] = arguments[j];
-	          }
-
-	          listeners[i].fn.apply(listeners[i].context, args);
+	  // If there is no 'error' event listener then throw.
+	  if (type === 'error') {
+	    if (!this._events.error ||
+	        (isObject(this._events.error) && !this._events.error.length)) {
+	      er = arguments[1];
+	      if (er instanceof Error) {
+	        throw er; // Unhandled 'error' event
 	      }
+	      throw TypeError('Uncaught, unspecified "error" event.');
 	    }
+	  }
+
+	  handler = this._events[type];
+
+	  if (isUndefined(handler))
+	    return false;
+
+	  if (isFunction(handler)) {
+	    switch (arguments.length) {
+	      // fast cases
+	      case 1:
+	        handler.call(this);
+	        break;
+	      case 2:
+	        handler.call(this, arguments[1]);
+	        break;
+	      case 3:
+	        handler.call(this, arguments[1], arguments[2]);
+	        break;
+	      // slower
+	      default:
+	        args = Array.prototype.slice.call(arguments, 1);
+	        handler.apply(this, args);
+	    }
+	  } else if (isObject(handler)) {
+	    args = Array.prototype.slice.call(arguments, 1);
+	    listeners = handler.slice();
+	    len = listeners.length;
+	    for (i = 0; i < len; i++)
+	      listeners[i].apply(this, args);
 	  }
 
 	  return true;
 	};
 
-	/**
-	 * Register a new EventListener for the given event.
-	 *
-	 * @param {String} event Name of the event.
-	 * @param {Functon} fn Callback function.
-	 * @param {Mixed} context The context of the function.
-	 * @api public
-	 */
-	EventEmitter.prototype.on = function on(event, fn, context) {
-	  var listener = new EE(fn, context || this)
-	    , evt = prefix ? prefix + event : event;
+	EventEmitter.prototype.addListener = function(type, listener) {
+	  var m;
 
-	  if (!this._events) this._events = prefix ? {} : Object.create(null);
-	  if (!this._events[evt]) this._events[evt] = listener;
-	  else {
-	    if (!this._events[evt].fn) this._events[evt].push(listener);
-	    else this._events[evt] = [
-	      this._events[evt], listener
-	    ];
-	  }
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
 
-	  return this;
-	};
+	  if (!this._events)
+	    this._events = {};
 
-	/**
-	 * Add an EventListener that's only called once.
-	 *
-	 * @param {String} event Name of the event.
-	 * @param {Function} fn Callback function.
-	 * @param {Mixed} context The context of the function.
-	 * @api public
-	 */
-	EventEmitter.prototype.once = function once(event, fn, context) {
-	  var listener = new EE(fn, context || this, true)
-	    , evt = prefix ? prefix + event : event;
+	  // To avoid recursion in the case that type === "newListener"! Before
+	  // adding it to the listeners, first emit "newListener".
+	  if (this._events.newListener)
+	    this.emit('newListener', type,
+	              isFunction(listener.listener) ?
+	              listener.listener : listener);
 
-	  if (!this._events) this._events = prefix ? {} : Object.create(null);
-	  if (!this._events[evt]) this._events[evt] = listener;
-	  else {
-	    if (!this._events[evt].fn) this._events[evt].push(listener);
-	    else this._events[evt] = [
-	      this._events[evt], listener
-	    ];
-	  }
+	  if (!this._events[type])
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    this._events[type] = listener;
+	  else if (isObject(this._events[type]))
+	    // If we've already got an array, just append.
+	    this._events[type].push(listener);
+	  else
+	    // Adding the second element, need to change to array.
+	    this._events[type] = [this._events[type], listener];
 
-	  return this;
-	};
-
-	/**
-	 * Remove event listeners.
-	 *
-	 * @param {String} event The event we want to remove.
-	 * @param {Function} fn The listener that we need to find.
-	 * @param {Mixed} context Only remove listeners matching this context.
-	 * @param {Boolean} once Only remove once listeners.
-	 * @api public
-	 */
-	EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
-	  var evt = prefix ? prefix + event : event;
-
-	  if (!this._events || !this._events[evt]) return this;
-
-	  var listeners = this._events[evt]
-	    , events = [];
-
-	  if (fn) {
-	    if (listeners.fn) {
-	      if (
-	           listeners.fn !== fn
-	        || (once && !listeners.once)
-	        || (context && listeners.context !== context)
-	      ) {
-	        events.push(listeners);
-	      }
+	  // Check for listener leak
+	  if (isObject(this._events[type]) && !this._events[type].warned) {
+	    if (!isUndefined(this._maxListeners)) {
+	      m = this._maxListeners;
 	    } else {
-	      for (var i = 0, length = listeners.length; i < length; i++) {
-	        if (
-	             listeners[i].fn !== fn
-	          || (once && !listeners[i].once)
-	          || (context && listeners[i].context !== context)
-	        ) {
-	          events.push(listeners[i]);
-	        }
+	      m = EventEmitter.defaultMaxListeners;
+	    }
+
+	    if (m && m > 0 && this._events[type].length > m) {
+	      this._events[type].warned = true;
+	      console.error('(node) warning: possible EventEmitter memory ' +
+	                    'leak detected. %d listeners added. ' +
+	                    'Use emitter.setMaxListeners() to increase limit.',
+	                    this._events[type].length);
+	      if (typeof console.trace === 'function') {
+	        // not supported in IE 10
+	        console.trace();
 	      }
 	    }
 	  }
 
-	  //
-	  // Reset the array, or remove it completely if we have no more listeners.
-	  //
-	  if (events.length) {
-	    this._events[evt] = events.length === 1 ? events[0] : events;
-	  } else {
-	    delete this._events[evt];
+	  return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  var fired = false;
+
+	  function g() {
+	    this.removeListener(type, g);
+
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(this, arguments);
+	    }
+	  }
+
+	  g.listener = listener;
+	  this.on(type, g);
+
+	  return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+	  var list, position, length, i;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events || !this._events[type])
+	    return this;
+
+	  list = this._events[type];
+	  length = list.length;
+	  position = -1;
+
+	  if (list === listener ||
+	      (isFunction(list.listener) && list.listener === listener)) {
+	    delete this._events[type];
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+
+	  } else if (isObject(list)) {
+	    for (i = length; i-- > 0;) {
+	      if (list[i] === listener ||
+	          (list[i].listener && list[i].listener === listener)) {
+	        position = i;
+	        break;
+	      }
+	    }
+
+	    if (position < 0)
+	      return this;
+
+	    if (list.length === 1) {
+	      list.length = 0;
+	      delete this._events[type];
+	    } else {
+	      list.splice(position, 1);
+	    }
+
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
 	  }
 
 	  return this;
 	};
 
-	/**
-	 * Remove all listeners or only the listeners for the specified event.
-	 *
-	 * @param {String} event The event want to remove all listeners for.
-	 * @api public
-	 */
-	EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
-	  if (!this._events) return this;
+	EventEmitter.prototype.removeAllListeners = function(type) {
+	  var key, listeners;
 
-	  if (event) delete this._events[prefix ? prefix + event : event];
-	  else this._events = prefix ? {} : Object.create(null);
+	  if (!this._events)
+	    return this;
+
+	  // not listening for removeListener, no need to emit
+	  if (!this._events.removeListener) {
+	    if (arguments.length === 0)
+	      this._events = {};
+	    else if (this._events[type])
+	      delete this._events[type];
+	    return this;
+	  }
+
+	  // emit removeListener for all listeners on all events
+	  if (arguments.length === 0) {
+	    for (key in this._events) {
+	      if (key === 'removeListener') continue;
+	      this.removeAllListeners(key);
+	    }
+	    this.removeAllListeners('removeListener');
+	    this._events = {};
+	    return this;
+	  }
+
+	  listeners = this._events[type];
+
+	  if (isFunction(listeners)) {
+	    this.removeListener(type, listeners);
+	  } else if (listeners) {
+	    // LIFO order
+	    while (listeners.length)
+	      this.removeListener(type, listeners[listeners.length - 1]);
+	  }
+	  delete this._events[type];
 
 	  return this;
 	};
 
-	//
-	// Alias methods names because people roll like that.
-	//
-	EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-	EventEmitter.prototype.addListener = EventEmitter.prototype.on;
-
-	//
-	// This function doesn't apply anymore.
-	//
-	EventEmitter.prototype.setMaxListeners = function setMaxListeners() {
-	  return this;
+	EventEmitter.prototype.listeners = function(type) {
+	  var ret;
+	  if (!this._events || !this._events[type])
+	    ret = [];
+	  else if (isFunction(this._events[type]))
+	    ret = [this._events[type]];
+	  else
+	    ret = this._events[type].slice();
+	  return ret;
 	};
 
-	//
-	// Expose the prefix.
-	//
-	EventEmitter.prefixed = prefix;
+	EventEmitter.prototype.listenerCount = function(type) {
+	  if (this._events) {
+	    var evlistener = this._events[type];
 
-	//
-	// Expose the module.
-	//
-	if (true) {
-	  module.exports = EventEmitter;
+	    if (isFunction(evlistener))
+	      return 1;
+	    else if (evlistener)
+	      return evlistener.length;
+	  }
+	  return 0;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  return emitter.listenerCount(type);
+	};
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
 	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+
+/***/ },
+/* 171 */
+/***/ function(module, exports) {
+
+	/* eslint-disable no-unused-vars */
+	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
 
 
 /***/ }
