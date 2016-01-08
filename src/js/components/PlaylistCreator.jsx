@@ -10,11 +10,15 @@ var PlaylistCreator = React.createClass({
 	_playlistSave: function(){
 		var playlistName = document.getElementById('playlistInput').value.trim();
 		actions.savePlaylist(playlistName);
+		this.props.close();
 	},
 	render: function(){
+	var style = {
+		backgroundColor: 'green'
+	};
 	return (
 		<div id="playlist-creator-container">
-			<div id="creatorBody">
+			<div className="creatorBody">
 				<div id="creatorTop">
 					<h2> Create new playlist </h2>
 				</div>
@@ -22,8 +26,8 @@ var PlaylistCreator = React.createClass({
 					<input id="playlistInput" type="text" placeholder="Name of playlist"/>
 				</div>
 				<div id="creatorBottom">
-					<a id="playlistSave" className="btn" onClick={this._playlistSave}> Save </a>
-					<a id="playlistCancel" className="btn" onClick={this.props.close}> Cancel </a>
+					<a className="btn facebook" style={style} onClick={this._playlistSave}> Save </a>
+					<a className="btn google" onClick={this.props.close}> Cancel </a>
 				</div>
 			</div>
 		</div>

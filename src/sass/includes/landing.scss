@@ -28,7 +28,9 @@
 		}	
 	}
 
-	.btn
+}
+
+.btn
 	{
 		height: 50px;
 		width: 125px;
@@ -43,7 +45,7 @@
 		left: 50%;
 		font-family: 'Lato', sans-serif;
 		text-decoration: none;
-
+		z-index: 9999;
 		&:before {
 			content: "";
 			display: inline-block;
@@ -55,8 +57,9 @@
 			cursor: pointer;
 		}
 	}
+	
 
-	#facebook
+	.facebook
 	{
 		background-color: transparent;
 		color: #3b5998;
@@ -69,7 +72,7 @@
 		}
 	}
 
-	#google
+	.google
 	{
 		background-color: transparent;
 		color: #dd4b39;
@@ -81,4 +84,7 @@
 			//transition: .2s ease;
 		}
 	}
-}
+
+	.random {
+		background: green;
+	}

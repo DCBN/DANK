@@ -54,9 +54,37 @@ var actions = {
 		});
 	},
 	savePlaylist: function(name){
+		api.save_playlist(name)
+		.then(function(){
+			dispatcher.dispatch({
+				actionType: actionConstants.SAVE_PLAYLIST,
+				index: name
+			});
+		}, function(error){
+			dispatcher.dispatch({
+				actionType: actionConstants.ERROR,
+				error: error
+			});
+		});
+	},
+	getPlaylists: function(){
+		api.get_playlists()
+		.then(function(playlists){
+			dispatcher.dispatch({
+				actionType: actionConstants.GET_PLAYLISTS,
+				index: playlists
+			});
+		}, function(error){
+			dispatcher.dispatch({
+				actionType: actionConstants.ERROR,
+				error: error
+			});
+		});
+	},
+	addToPlaylist: function(item){
 		dispatcher.dispatch({
-			actionType: actionConstants.SAVE_PLAYLIST,
-			index: name
+			actionType: actionConstants.ADD_TO_PLAYLIST,
+			index: item
 		});
 	}	
 };

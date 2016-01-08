@@ -49,7 +49,6 @@ dispatcher.register(function(action){
 			break;
 		case actionConstants.SEARCH_RESULT:
 			_store.list = [];
-			console.log(_store.list);
 			action.results.map(function(item){
 				_store.list.push(item);
 			});
@@ -69,16 +68,38 @@ dispatcher.register(function(action){
 			_store.genres = _store.genres.filter(function(index){
 				return index !== action.index;
 			});
-			console.log(_store.genres);
 			SearchStore.emit(CHANGE_EVENT);
 			break;
 		case actionConstants.SAVE_PLAYLIST:
+			_store.playlists = [];
 			var playlists = {
 				"name": action.index,
-				"items": {}
+				"items": [
+					{"name": "Batman"},
+					{"name": "Spiderman"},
+					{"name": "Superman"}
+				]
 			}
 			;
 			_store.playlists.push(playlists);
+			SearchStore.emit(CHANGE_EVENT);
+			break;
+		case actionConstants.ADD_TO_PLAYLIST:
+			console.log(action.index);
+		case actionConstants.GET_PLAYLISTS:
+			_store.playlists = [];
+			action.index.map(function(playlist){
+				var playlists = {
+					"name": playlist._name,
+					"id": playlist._id,
+					"items": [
+					{"name": "Batman"},
+					{"name": "Spiderman"},
+					{"name": "Superman"}
+					]
+				};
+				_store.playlists.push(playlists);
+			});
 			SearchStore.emit(CHANGE_EVENT);
 			break;
 		default:

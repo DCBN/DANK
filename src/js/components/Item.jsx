@@ -3,9 +3,8 @@ var ReactDOM = require('react-dom');
 
 var Item = React.createClass({
 	displayName: 'Item',
-
-
 	render: function() {
+		console.log(this.props);
 		if(this.props.movie.certification == "" || typeof this.props.movie.genres === "undefined") {
 			this.props.movie.certification = "";
 		}
@@ -39,7 +38,7 @@ var Item = React.createClass({
 		}
 
 		return (
-			<div className="movieItem" style={poster}>
+			<div className="movieItem" style={poster} onClick={this.props.toggle}>
 				<div className="itemInfo">
 					<div className="itemSection">	
 						<span className="itemTitle">{this.props.movie.title}</span>
@@ -50,16 +49,10 @@ var Item = React.createClass({
 					<div className="itemSection">
 						<span className="itemGenres">{fixedGenres}</span>
 					</div>
+					<div className="itemSection">
+						<span className="addToPlaylist">Add to playlist</span>
+					</div>
 				</div>
-				{/*<div className="movieImage"></div>
-				<div className="top">
-					<h1>{this.props.title}</h1><span>{' (' +  this.props.movie.year + ')'}</span>
-					<span className="movieGenres"> {this.props.movie.genres.join(', ')}</span>
-				</div>
-				<div className="center">
-					<span className="movieGenres"> {this.props.movie.certification}</span>
-					<span className="movieGenres"> {this.props.movie.runtime + ' min'} </span>
-				</div>*/}
 			</div>
 		);
 	}

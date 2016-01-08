@@ -1,11 +1,15 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var PlaylistCreator = require('./PlaylistCreator');
+var PlaylistItem = require('./PlaylistItem');
+var actions = require('../actions/actions');
+var actionConstants = require('../constants/actionConstants');
 var SearchStore = require('../stores/search-store');
 
-var Playlist = React.createClass({
-	displayName: 'Playlist',
+var PlaylistApp = React.createClass({
+	displayName: 'PlaylistApp',
 	getInitialState: function(){
+		actions.getPlaylists();
 		SearchStore.getPlaylists()
 		return {
 			showCreator: false
@@ -24,24 +28,32 @@ var Playlist = React.createClass({
 		this.setState(SearchStore.getPlaylists());
 	},
 	_playlistCreator: function(){
-		this.setState({showCreator: true});
+		this.setState({showCreator: !this.state.showCreator});
 	},
-	_close: function(){
+	_closeCreator: function(){
 		this.setState({showCreator: false});
 	},
 	render: function(){
 	if(!this.state.playlists) return false;
+	var playlistStyle = {
+			marginBottom: '20px',
+			width: '80%',
+			paddingLeft: '10%'
+	}
 	return (
 		<div id="playlist-container">
-				<h2> Playlists </h2>
-				{this.state.playlists.map(function(item){
-					return <li className="genreItem">{item.name}</li>;
-				})}
+				<div id="playlists" style={playlistStyle}>	
+					<h2> Playlists </h2>
+					{this.state.playlists.map(function(item){
+						return <PlaylistItem playlist={item} />
+					})}
+				</div>
 				<a href="#" id="create-playlist" onClick={this._playlistCreator}>Create new playlist</a>
-				{this.state.showCreator ? <PlaylistCreator close={this._close} /> : null}
+				{this.state.showCreator ? <PlaylistCreator close={this._playlistCreator} /> : null}
+
 		</div>
 	)
 	}
 });
 
-module.exports = Playlist;
+module.exports = PlaylistApp;

@@ -36,8 +36,8 @@ app.use(cookieParser());
 
 app.use(session({
 		secret: 'verysecretstring',
-		saveUninitialized: true,
 		resave: true,
+		saveUninitialized: true,
 		cookie: {
 			httpOnly: true,
 			maxAge: 1000 * 2630000 * 5 // 5 months
@@ -51,6 +51,7 @@ app.use(passport.session());
 require('./routes/landing.js')(app);
 require('./routes/movies.js')(app);
 require('./routes/tv-shows.js')(app);
+require('./routes/Playlist.js')(app);
 require('./routes/authRoutes.js')(app, passport);
 
 var server = app.listen(3000, function () {
