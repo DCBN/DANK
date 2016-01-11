@@ -2,7 +2,7 @@
 {
 	height: 100%;
 	width: 100%;
-	background: #0078FF;
+	background: #434A61;
 	background-size: cover;
 }
 
@@ -61,26 +61,24 @@
 
 	.facebook
 	{
-		background-color: transparent;
+		background-color: #3b5998;
 		color: #3b5998;
-		border: 2px solid #3b5998;
 		margin-left: -150px;
+		color: white;
 		&:hover {
-			background-color: #3b5998;
-			color: white;
+			background-color: #6295FF;
 			//transition: .2s ease;
 		}
 	}
 
 	.google
 	{
-		background-color: transparent;
+		background-color: #dd4b39;
 		color: #dd4b39;
-		border: 2px solid #dd4b39;
 		margin-right: -150px;
+		color: white;
 		&:hover {
-			background-color: #dd4b39;
-			color: white;
+			background-color: #FF5744;
 			//transition: .2s ease;
 		}
 	}

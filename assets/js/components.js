@@ -18705,7 +18705,7 @@
 					React.createElement(
 						'h1',
 						null,
-						'DANK'
+						'Qlist'
 					),
 					React.createElement(
 						'p',

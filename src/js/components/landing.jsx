@@ -8,7 +8,7 @@ var Landing = React.createClass({
 		return (
 			<div className="landing-container">
 				<div className="banner">	
-					<h1>DANK</h1>
+					<h1>Qlist</h1>
 					<p>Your movie queue for netflix </p>
 				</div>
 					<a className="btn facebook" href="/auth/facebook"><i className="icon icon-facebook-official"></i> Facebook </a>
