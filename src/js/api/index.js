@@ -14,7 +14,16 @@ var api = {
 	},
 	get_playlists: function(){
 		return request.getInternal('/movies/playlists');
-	}	
+	},
+	get_playlist: function(id){
+		return request.getPlaylist('/movies/playlist/' + id);
+	},
+	addToPlaylist: function(playlist, movie){
+		return request.postToPlaylist('/movies/playlist/add', playlist, movie);
+	},
+	getMovieById: function(id){
+		return request.get('/search?id_type=trakt-movie&id=' + id + '&extended=full,images');
+	}
 };
 
 module.exports = api;

@@ -55,7 +55,43 @@ var buildRequest = function(httpMethod, url, data){
 				}
 			});
 		});
-	};
+	} 
+};
+
+var postToPlaylist = function(url, playlist, movie){
+	return new Promise(function(resolve, reject){
+			request.post(url)
+			.send({
+				playlist: playlist,
+				movie: movie
+			})
+			.on('error', function(error) {
+				reject(error);
+			})
+			.end(function(error, result){
+				if(error) {
+					reject(error);
+				} else {
+					resolve(result.body);
+				}
+			});
+});
+};
+
+var getPlaylist = function(url, id){
+	return new Promise(function(resolve, reject){
+			request.get(url)
+			.on('error', function(error) {
+				reject(error);
+			})
+			.end(function(error, result){
+				if(error) {
+					reject(error);
+				} else {
+					resolve(result.body);
+				}
+			});
+});
 };
 
 module.exports = {
@@ -67,5 +103,11 @@ module.exports = {
 	},
 	getInternal: function(url){
 		return buildRequest('getInternal', url);
+	},
+	getPlaylist: function(url, id){
+		return getPlaylist(url, id);
+	},
+	postToPlaylist: function(url, playlist, movie){
+		return postToPlaylist(url, playlist, movie);
 	}
 };

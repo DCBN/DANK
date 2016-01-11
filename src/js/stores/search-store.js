@@ -9,7 +9,8 @@ var _store = {
 	list: [],
 	error: [],
 	genres: [],
-	playlists: []
+	playlists: [],
+	playlist: []
 }
 var resultErrors = null;
 var CHANGE_EVENT = 'change';
@@ -31,6 +32,9 @@ var SearchStore = ObjectAssign( {}, EventEmitter.prototype, {
 		return _store;
 	},
 	getPlaylists: function() {
+		return _store;
+	},
+	getPlaylist: function(){
 		return _store;
 	}
 });
@@ -74,32 +78,31 @@ dispatcher.register(function(action){
 			_store.playlists = [];
 			var playlists = {
 				"name": action.index,
-				"items": [
-					{"name": "Batman"},
-					{"name": "Spiderman"},
-					{"name": "Superman"}
-				]
-			}
-			;
+			};
 			_store.playlists.push(playlists);
 			SearchStore.emit(CHANGE_EVENT);
 			break;
 		case actionConstants.ADD_TO_PLAYLIST:
-			console.log(action.index);
+			console.log('added!');
+			SearchStore.emit(CHANGE_EVENT);
+			break;
 		case actionConstants.GET_PLAYLISTS:
 			_store.playlists = [];
 			action.index.map(function(playlist){
 				var playlists = {
 					"name": playlist._name,
 					"id": playlist._id,
-					"items": [
-					{"name": "Batman"},
-					{"name": "Spiderman"},
-					{"name": "Superman"}
-					]
 				};
 				_store.playlists.push(playlists);
 			});
+			SearchStore.emit(CHANGE_EVENT);
+			break;
+		case actionConstants.GET_PLAYLIST:
+			_store.playlist = [];
+			action.items.items.map(function(movie){
+				_store.playlist.push(movie);
+			});
+			console.log(_store.playlist);
 			SearchStore.emit(CHANGE_EVENT);
 			break;
 		default:

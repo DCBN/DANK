@@ -1,26 +1,12 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var PlaylistViewer = require('./PlaylistViewer');
 
 var PlaylistItem = React.createClass({
 	displayName: 'PlaylistItem',
 
-	getInitialState: function(){
-		return {
-			showViewer: false
-		};
-	},
-	
-	_showViewer: function(){
-		this.setState({showViewer: true});
-	},
-
-	_closeViewer: function(){
-		this.setState({showViewer: false});
-	},
-
-	render: function(){
+	render: function(){;
+		console.log(this.props.playlist.name);
 		var itemStyle = {
 			height: '40px',
 			width: '100%',
@@ -35,8 +21,7 @@ var PlaylistItem = React.createClass({
 		}
 		return (
 			<div className="playlistItem">	
-				<li style={itemStyle} onClick={this._showViewer}> {this.props.playlist.name} </li>
-				{this.state.showViewer ? <PlaylistViewer playlistName={this.props.playlist.name} items={this.props.playlist.items} close={this._closeViewer} /> : null}
+				<li style={itemStyle} onClick={this.props.showViewer}> {this.props.playlist.name} </li>
 			</div>
 			);
 	}

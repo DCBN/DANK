@@ -3,8 +3,11 @@ var ReactDOM = require('react-dom');
 
 var Item = React.createClass({
 	displayName: 'Item',
+	toggle: function(){
+		this.props.toggleHandler();
+	},
+
 	render: function() {
-		console.log(this.props);
 		if(this.props.movie.certification == "" || typeof this.props.movie.genres === "undefined") {
 			this.props.movie.certification = "";
 		}
@@ -36,9 +39,8 @@ var Item = React.createClass({
 			backgroundImage: 'url(' + this.props.movie.images.poster.full + ')'
 		}
 		}
-
 		return (
-			<div className="movieItem" style={poster} onClick={this.props.toggle}>
+			<div className="movieItem" style={poster}>
 				<div className="itemInfo">
 					<div className="itemSection">	
 						<span className="itemTitle">{this.props.movie.title}</span>
@@ -50,7 +52,7 @@ var Item = React.createClass({
 						<span className="itemGenres">{fixedGenres}</span>
 					</div>
 					<div className="itemSection">
-						<span className="addToPlaylist">Add to playlist</span>
+						<span className="addToPlaylist" onClick={this.props.toggle}>Add to playlist</span>
 					</div>
 				</div>
 			</div>

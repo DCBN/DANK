@@ -40,21 +40,22 @@ var Content = React.createClass({
 	},
 
 	toggleSelector: function(movie){
-		console.log(movie);
-		this.setState({showSelector: !this.state.showSelector});
+		this.setState({
+			movie: movie,
+			showSelector: !this.state.showSelector
+		});
 	},
 
 	render: function() {
 		if(!this.state.list) return false;
 		var items = 
 				this.state.list.map(function(item){
-					return <Item toggle={this.toggleSelector.bind(this)} movie={item.movie} key={item.movie.ids.trakt} />
-				});
+					return <Item movie={item.movie} key={item.movie.ids.trakt} toggle={this.toggleSelector.bind(this, item.movie.ids.trakt)}/>
+				}.bind(this));
 		return (
 			<div className="movielist">	
 				<div>{items}</div>
-				<li onClick={this.toggleSelector}>CLICK ME </li>
-				{this.state.showSelector ? <PlaylistSelector playlists={this.state.playlists} /> : null}
+				{this.state.showSelector ? <PlaylistSelector movie={this.state.movie} playlists={this.state.playlists} toggle={this.toggleSelector}/> : null}
 			</div>
 		);
 	}

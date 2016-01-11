@@ -49,8 +49,8 @@
 	var Landing = __webpack_require__(148);
 	var Genres = __webpack_require__(149);
 	var Content = __webpack_require__(167);
-	var Search = __webpack_require__(168);
-	var PlaylistApp = __webpack_require__(169);
+	var Search = __webpack_require__(170);
+	var PlaylistApp = __webpack_require__(171);
 
 	var landingWrap = document.getElementById('landingWrap');
 	if (landingWrap) {
@@ -18954,7 +18954,12 @@
 	var dispatcher = __webpack_require__(159);
 	var actionConstants = __webpack_require__(163);
 
+	var store = {
+		items: []
+	};
+
 	var actions = {
+		//Get Trending movies
 		trending: function () {
 			/*dispatcher.dispatch({
 	                actionType: actionConstants.GET_TRENDING
@@ -18972,6 +18977,7 @@
 				});
 			});
 		},
+		//Search content by name
 		search: function (query) {
 			/*dispatcher.dispatch({
 	                actionType: actionConstants.GET_TRENDING
@@ -18989,18 +18995,21 @@
 				});
 			});
 		},
+		//Add genre filter
 		addGenre: function (genre) {
 			dispatcher.dispatch({
 				actionType: actionConstants.ADD_GENRE,
 				index: genre
 			});
 		},
+		//Remove genre filter
 		removeGenre: function (genre) {
 			dispatcher.dispatch({
 				actionType: actionConstants.REMOVE_GENRE,
 				index: genre
 			});
 		},
+		//Create new playlist
 		savePlaylist: function (name) {
 			api.save_playlist(name).then(function () {
 				dispatcher.dispatch({
@@ -19014,6 +19023,7 @@
 				});
 			});
 		},
+		//Get all user playlists
 		getPlaylists: function () {
 			api.get_playlists().then(function (playlists) {
 				dispatcher.dispatch({
@@ -19027,10 +19037,41 @@
 				});
 			});
 		},
-		addToPlaylist: function (item) {
-			dispatcher.dispatch({
-				actionType: actionConstants.ADD_TO_PLAYLIST,
-				index: item
+		//Get playlist with including items
+		getPlaylist: function (id) {
+			var movies;
+			api.get_playlist(id).then(function (items) {
+				items.map(function (movie) {
+					store.items = [];
+					api.getMovieById(movie._id).then(function (movie) {
+						store.items.push(movie);
+					}).then(function () {
+						dispatcher.dispatch({
+							actionType: actionConstants.GET_PLAYLIST,
+							items: store
+						}, function (error) {
+							dispatcher.dispatch({
+								actionType: actionConstants.ERROR,
+								error: error
+							});
+						});
+					});
+				});
+			});
+		},
+		//Add item to playlist
+		addToPlaylist: function (playlist, movie) {
+			api.addToPlaylist(playlist, movie).then(function () {
+				dispatcher.dispatch({
+					actionType: actionConstants.ADD_TO_PLAYLIST,
+					playlist: playlist,
+					movie: movie
+				}, function (error) {
+					dispatcher.dispatch({
+						actionType: actionConstants.ERROR,
+						error: error
+					});
+				});
 			});
 		}
 	};
@@ -19057,6 +19098,15 @@
 		},
 		get_playlists: function () {
 			return request.getInternal('/movies/playlists');
+		},
+		get_playlist: function (id) {
+			return request.getPlaylist('/movies/playlist/' + id);
+		},
+		addToPlaylist: function (playlist, movie) {
+			return request.postToPlaylist('/movies/playlist/add', playlist, movie);
+		},
+		getMovieById: function (id) {
+			return request.get('/search?id_type=trakt-movie&id=' + id + '&extended=full,images');
 		}
 	};
 
@@ -19115,7 +19165,38 @@
 					}
 				});
 			});
-		};
+		}
+	};
+
+	var postToPlaylist = function (url, playlist, movie) {
+		return new Promise(function (resolve, reject) {
+			request.post(url).send({
+				playlist: playlist,
+				movie: movie
+			}).on('error', function (error) {
+				reject(error);
+			}).end(function (error, result) {
+				if (error) {
+					reject(error);
+				} else {
+					resolve(result.body);
+				}
+			});
+		});
+	};
+
+	var getPlaylist = function (url, id) {
+		return new Promise(function (resolve, reject) {
+			request.get(url).on('error', function (error) {
+				reject(error);
+			}).end(function (error, result) {
+				if (error) {
+					reject(error);
+				} else {
+					resolve(result.body);
+				}
+			});
+		});
 	};
 
 	module.exports = {
@@ -19127,6 +19208,12 @@
 		},
 		getInternal: function (url) {
 			return buildRequest('getInternal', url);
+		},
+		getPlaylist: function (url, id) {
+			return getPlaylist(url, id);
+		},
+		postToPlaylist: function (url, playlist, movie) {
+			return postToPlaylist(url, playlist, movie);
 		}
 	};
 
@@ -20869,7 +20956,9 @@
 		ADD_GENRE: 'ADD_GENRE',
 		REMOVE_GENRE: 'REMOVE_GENRE',
 		SAVE_PLAYLIST: 'SAVE_PLAYLIST',
-		ADD_TO_PLAYLIST: 'ADD_TO_PLAYLIST'
+		ADD_TO_PLAYLIST: 'ADD_TO_PLAYLIST',
+		GET_PLAYLIST: 'GET_PLAYLIST',
+		GET_PLAYLISTS: 'GET_PLAYLISTS'
 	});
 
 /***/ },
@@ -20887,7 +20976,8 @@
 		list: [],
 		error: [],
 		genres: [],
-		playlists: []
+		playlists: [],
+		playlist: []
 	};
 	var resultErrors = null;
 	var CHANGE_EVENT = 'change';
@@ -20909,6 +20999,9 @@
 			return _store;
 		},
 		getPlaylists: function () {
+			return _store;
+		},
+		getPlaylist: function () {
 			return _store;
 		}
 	});
@@ -20951,24 +21044,32 @@
 			case actionConstants.SAVE_PLAYLIST:
 				_store.playlists = [];
 				var playlists = {
-					"name": action.index,
-					"items": [{ "name": "Batman" }, { "name": "Spiderman" }, { "name": "Superman" }]
+					"name": action.index
 				};
 				_store.playlists.push(playlists);
 				SearchStore.emit(CHANGE_EVENT);
 				break;
 			case actionConstants.ADD_TO_PLAYLIST:
-				console.log(action.index);
+				console.log('added!');
+				SearchStore.emit(CHANGE_EVENT);
+				break;
 			case actionConstants.GET_PLAYLISTS:
 				_store.playlists = [];
 				action.index.map(function (playlist) {
 					var playlists = {
 						"name": playlist._name,
-						"id": playlist._id,
-						"items": [{ "name": "Batman" }, { "name": "Spiderman" }, { "name": "Superman" }]
+						"id": playlist._id
 					};
 					_store.playlists.push(playlists);
 				});
+				SearchStore.emit(CHANGE_EVENT);
+				break;
+			case actionConstants.GET_PLAYLIST:
+				_store.playlist = [];
+				action.items.items.map(function (movie) {
+					_store.playlist.push(movie);
+				});
+				console.log(_store.playlist);
 				SearchStore.emit(CHANGE_EVENT);
 				break;
 			default:
@@ -21333,8 +21434,8 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
-	var Item = __webpack_require__(173);
-	var PlaylistSelector = __webpack_require__(174);
+	var Item = __webpack_require__(168);
+	var PlaylistSelector = __webpack_require__(169);
 
 	var actions = __webpack_require__(153);
 	var actionConstants = __webpack_require__(163);
@@ -21373,15 +21474,17 @@
 		},
 
 		toggleSelector: function (movie) {
-			console.log(movie);
-			this.setState({ showSelector: !this.state.showSelector });
+			this.setState({
+				movie: movie,
+				showSelector: !this.state.showSelector
+			});
 		},
 
 		render: function () {
 			if (!this.state.list) return false;
-			var items = this.state.list.map(function (item) {
-				return React.createElement(Item, { toggle: this.toggleSelector.bind(this), movie: item.movie, key: item.movie.ids.trakt });
-			});
+			var items = this.state.list.map((function (item) {
+				return React.createElement(Item, { movie: item.movie, key: item.movie.ids.trakt, toggle: this.toggleSelector.bind(this, item.movie.ids.trakt) });
+			}).bind(this));
 			return React.createElement(
 				'div',
 				{ className: 'movielist' },
@@ -21390,12 +21493,7 @@
 					null,
 					items
 				),
-				React.createElement(
-					'li',
-					{ onClick: this.toggleSelector },
-					'CLICK ME '
-				),
-				this.state.showSelector ? React.createElement(PlaylistSelector, { playlists: this.state.playlists }) : null
+				this.state.showSelector ? React.createElement(PlaylistSelector, { movie: this.state.movie, playlists: this.state.playlists, toggle: this.toggleSelector }) : null
 			);
 		}
 	});
@@ -21404,6 +21502,145 @@
 
 /***/ },
 /* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+
+	var Item = React.createClass({
+		displayName: 'Item',
+		toggle: function () {
+			this.props.toggleHandler();
+		},
+
+		render: function () {
+			if (this.props.movie.certification == "" || typeof this.props.movie.genres === "undefined") {
+				this.props.movie.certification = "";
+			} else {
+				var fixedCertification = this.props.movie.certification + " | ";
+			}
+			if (this.props.movie.runtime == "" || typeof this.props.movie.runtime === "undefined") {
+				this.props.movie.runtime = "";
+			} else {
+				var fixedRuntime = this.props.movie.runtime + ' min' + ' | ';
+			}
+			if (this.props.movie.year == "" || typeof this.props.movie.year === "undefined") {
+				this.props.movie.year = "";
+			} else {
+				var fixedYear = this.props.movie.year;
+			}
+			if (this.props.movie.genres == "" || typeof this.props.movie.genres === "undefined") {
+				this.props.movie.genres = "";
+			} else {
+				var fixedGenres = 'Genres: ' + this.props.movie.genres.join(', ');
+			}
+			if (!this.props.movie.images.poster.full) {
+				var poster = {
+					backgroundImage: 'url(../img/poster-not-found.png)'
+				};
+			} else {
+				var poster = {
+					backgroundImage: 'url(' + this.props.movie.images.poster.full + ')'
+				};
+			}
+			return React.createElement(
+				'div',
+				{ className: 'movieItem', style: poster },
+				React.createElement(
+					'div',
+					{ className: 'itemInfo' },
+					React.createElement(
+						'div',
+						{ className: 'itemSection' },
+						React.createElement(
+							'span',
+							{ className: 'itemTitle' },
+							this.props.movie.title
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'itemSection' },
+						React.createElement(
+							'span',
+							{ className: 'itemFacts' },
+							fixedCertification,
+							fixedRuntime,
+							fixedYear
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'itemSection' },
+						React.createElement(
+							'span',
+							{ className: 'itemGenres' },
+							fixedGenres
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'itemSection' },
+						React.createElement(
+							'span',
+							{ className: 'addToPlaylist', onClick: this.props.toggle },
+							'Add to playlist'
+						)
+					)
+				)
+			);
+		}
+	});
+
+	module.exports = Item;
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(2);
+	var actions = __webpack_require__(153);
+	var actionConstants = __webpack_require__(163);
+	var SearchStore = __webpack_require__(164);
+
+	var PlaylistSelector = React.createClass({
+		displayName: 'PlaylistSelector',
+		addToPlaylist: function (id) {
+			actions.addToPlaylist(id, this.props.movie);
+			this.props.toggle();
+		},
+
+		render: function () {
+			var self = this;
+			if (!this.props.playlists) return false;
+			return React.createElement(
+				'div',
+				{ className: 'playlist-selector-container' },
+				React.createElement(
+					'div',
+					{ className: 'creatorBody' },
+					this.props.playlists.map(function (playlist) {
+						return React.createElement(
+							'li',
+							{ onClick: self.addToPlaylist.bind(self, playlist.id) },
+							playlist.name
+						);
+					}),
+					React.createElement(
+						'li',
+						{ onClick: this.props.toggle },
+						'Close'
+					)
+				)
+			);
+		}
+	});
+
+	module.exports = PlaylistSelector;
+
+/***/ },
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -21432,13 +21669,14 @@
 	module.exports = Search;
 
 /***/ },
-/* 169 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
-	var PlaylistCreator = __webpack_require__(170);
-	var PlaylistItem = __webpack_require__(171);
+	var PlaylistCreator = __webpack_require__(172);
+	var PlaylistItem = __webpack_require__(173);
+	var PlaylistViewer = __webpack_require__(174);
 	var actions = __webpack_require__(153);
 	var actionConstants = __webpack_require__(163);
 	var SearchStore = __webpack_require__(164);
@@ -21449,7 +21687,8 @@
 			actions.getPlaylists();
 			SearchStore.getPlaylists();
 			return {
-				showCreator: false
+				showCreator: false,
+				showViewer: false
 			};
 		},
 
@@ -21467,8 +21706,10 @@
 		_playlistCreator: function () {
 			this.setState({ showCreator: !this.state.showCreator });
 		},
-		_closeCreator: function () {
-			this.setState({ showCreator: false });
+		_showViewer: function (id) {
+			actions.getPlaylist(id);
+			this.setState(SearchStore.getPlaylist());
+			this.setState({ showViewer: !this.state.showViewer });
 		},
 		render: function () {
 			if (!this.state.playlists) return false;
@@ -21477,6 +21718,9 @@
 				width: '80%',
 				paddingLeft: '10%'
 			};
+			var userlists = this.state.playlists.map((function (item) {
+				return React.createElement(PlaylistItem, { showViewer: this._showViewer.bind(this, item.id), playlist: item });
+			}).bind(this));
 			return React.createElement(
 				'div',
 				{ id: 'playlist-container' },
@@ -21487,17 +21731,18 @@
 						'h2',
 						null,
 						' Playlists '
-					),
-					this.state.playlists.map(function (item) {
-						return React.createElement(PlaylistItem, { playlist: item });
-					})
+					)
 				),
+				this.state.playlists.map((function (item) {
+					return React.createElement(PlaylistItem, { showViewer: this._showViewer.bind(this, item.id), playlist: item });
+				}).bind(this)),
 				React.createElement(
 					'a',
 					{ href: '#', id: 'create-playlist', onClick: this._playlistCreator },
 					'Create new playlist'
 				),
-				this.state.showCreator ? React.createElement(PlaylistCreator, { close: this._playlistCreator }) : null
+				this.state.showCreator ? React.createElement(PlaylistCreator, { close: this._playlistCreator }) : null,
+				this.state.showViewer ? React.createElement(PlaylistViewer, { items: this.state.playlist, close: this._showViewer }) : null
 			);
 		}
 	});
@@ -21505,7 +21750,7 @@
 	module.exports = PlaylistApp;
 
 /***/ },
-/* 170 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -21568,32 +21813,18 @@
 	module.exports = PlaylistCreator;
 
 /***/ },
-/* 171 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
 
-	var PlaylistViewer = __webpack_require__(172);
-
 	var PlaylistItem = React.createClass({
 		displayName: 'PlaylistItem',
 
-		getInitialState: function () {
-			return {
-				showViewer: false
-			};
-		},
-
-		_showViewer: function () {
-			this.setState({ showViewer: true });
-		},
-
-		_closeViewer: function () {
-			this.setState({ showViewer: false });
-		},
-
 		render: function () {
+			;
+			console.log(this.props.playlist.name);
 			var itemStyle = {
 				height: '40px',
 				width: '100%',
@@ -21611,19 +21842,18 @@
 				{ className: 'playlistItem' },
 				React.createElement(
 					'li',
-					{ style: itemStyle, onClick: this._showViewer },
+					{ style: itemStyle, onClick: this.props.showViewer },
 					' ',
 					this.props.playlist.name,
 					' '
-				),
-				this.state.showViewer ? React.createElement(PlaylistViewer, { playlistName: this.props.playlist.name, items: this.props.playlist.items, close: this._closeViewer }) : null
+				)
 			);
 		}
 	});
 	module.exports = PlaylistItem;
 
 /***/ },
-/* 172 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -21633,167 +21863,39 @@
 		displayName: 'PlaylistViewer',
 
 		render: function () {
+			var movieArray = this.props.items.map((function (movie) {
+				movie.title = movie[0].movie.title;
+				movie.poster = movie[0].movie.images.poster.full;
+				movie.image = movie[0].movie.images.fanart.full;
+				return movie;
+			}).bind(this));
 			return React.createElement(
 				'div',
 				{ id: 'playlistViewer' },
-				React.createElement(
-					'h1',
-					null,
-					' ',
-					this.props.playlistName,
-					' '
-				),
-				this.props.items.map(function (item) {
+				movieArray.map((function (movie) {
+					var style = { backgroundImage: 'url(' + movie.image + ')' };
 					return React.createElement(
-						'li',
-						null,
-						' ',
-						item.name,
-						' '
+						'div',
+						{ className: 'playlistItem', style: style },
+						React.createElement('img', { className: 'playlistPoster', src: movie.poster }),
+						React.createElement(
+							'li',
+							{ className: 'playlistTitle' },
+							' ',
+							movie.title,
+							' '
+						)
 					);
-				}),
+				}).bind(this)),
 				React.createElement(
 					'li',
-					{ onClick: this.props.close },
+					{ id: 'viewerClose', onClick: this.props.close },
 					'Close'
 				)
 			);
 		}
 	});
 	module.exports = PlaylistItem;
-
-/***/ },
-/* 173 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(2);
-
-	var Item = React.createClass({
-		displayName: 'Item',
-		render: function () {
-			console.log(this.props);
-			if (this.props.movie.certification == "" || typeof this.props.movie.genres === "undefined") {
-				this.props.movie.certification = "";
-			} else {
-				var fixedCertification = this.props.movie.certification + " | ";
-			}
-			if (this.props.movie.runtime == "" || typeof this.props.movie.runtime === "undefined") {
-				this.props.movie.runtime = "";
-			} else {
-				var fixedRuntime = this.props.movie.runtime + ' min' + ' | ';
-			}
-			if (this.props.movie.year == "" || typeof this.props.movie.year === "undefined") {
-				this.props.movie.year = "";
-			} else {
-				var fixedYear = this.props.movie.year;
-			}
-			if (this.props.movie.genres == "" || typeof this.props.movie.genres === "undefined") {
-				this.props.movie.genres = "";
-			} else {
-				var fixedGenres = 'Genres: ' + this.props.movie.genres.join(', ');
-			}
-			if (!this.props.movie.images.poster.full) {
-				var poster = {
-					backgroundImage: 'url(../img/poster-not-found.png)'
-				};
-			} else {
-				var poster = {
-					backgroundImage: 'url(' + this.props.movie.images.poster.full + ')'
-				};
-			}
-
-			return React.createElement(
-				'div',
-				{ className: 'movieItem', style: poster, onClick: this.props.toggle },
-				React.createElement(
-					'div',
-					{ className: 'itemInfo' },
-					React.createElement(
-						'div',
-						{ className: 'itemSection' },
-						React.createElement(
-							'span',
-							{ className: 'itemTitle' },
-							this.props.movie.title
-						)
-					),
-					React.createElement(
-						'div',
-						{ className: 'itemSection' },
-						React.createElement(
-							'span',
-							{ className: 'itemFacts' },
-							fixedCertification,
-							fixedRuntime,
-							fixedYear
-						)
-					),
-					React.createElement(
-						'div',
-						{ className: 'itemSection' },
-						React.createElement(
-							'span',
-							{ className: 'itemGenres' },
-							fixedGenres
-						)
-					),
-					React.createElement(
-						'div',
-						{ className: 'itemSection' },
-						React.createElement(
-							'span',
-							{ className: 'addToPlaylist' },
-							'Add to playlist'
-						)
-					)
-				)
-			);
-		}
-	});
-
-	module.exports = Item;
-
-/***/ },
-/* 174 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(2);
-	var PlaylistSelector = __webpack_require__(174);
-	var actions = __webpack_require__(153);
-	var actionConstants = __webpack_require__(163);
-	var SearchStore = __webpack_require__(164);
-
-	var PlaylistSelector = React.createClass({
-		displayName: 'PlaylistSelector',
-
-		render: function () {
-			if (!this.props.playlists) return false;
-			return React.createElement(
-				'div',
-				{ className: 'playlist-selector-container' },
-				React.createElement(
-					'div',
-					{ className: 'creatorBody' },
-					this.props.playlists.map(function (playlist) {
-						return React.createElement(
-							'li',
-							null,
-							playlist.name
-						);
-					}),
-					React.createElement(
-						'li',
-						{ onClick: this.props.toggle },
-						'Close'
-					)
-				)
-			);
-		}
-	});
-
-	module.exports = PlaylistSelector;
 
 /***/ }
 /******/ ]);
