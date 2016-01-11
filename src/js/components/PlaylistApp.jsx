@@ -35,6 +35,7 @@ var PlaylistApp = React.createClass({
 		this.setState({showCreator: !this.state.showCreator});
 	},
 	_showViewer: function(id){
+		console.log(id);
 		actions.getPlaylist(id);
 		this.setState(SearchStore.getPlaylist());
 		this.setState({showViewer: !this.state.showViewer});

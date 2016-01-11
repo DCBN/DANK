@@ -1053,7 +1053,7 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 
-	var invariant = function (condition, format, a, b, c, d, e, f) {
+	function invariant(condition, format, a, b, c, d, e, f) {
 	  if (process.env.NODE_ENV !== 'production') {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
@@ -1067,15 +1067,16 @@
 	    } else {
 	      var args = [a, b, c, d, e, f];
 	      var argIndex = 0;
-	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+	      error = new Error(format.replace(/%s/g, function () {
 	        return args[argIndex++];
 	      }));
+	      error.name = 'Invariant Violation';
 	    }
 
 	    error.framesToPop = 1; // we don't care about invariant's own frame
 	    throw error;
 	  }
-	};
+	}
 
 	module.exports = invariant;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
@@ -10502,8 +10503,8 @@
 	     */
 	    // autoCapitalize and autoCorrect are supported in Mobile Safari for
 	    // keyboard hints.
-	    autoCapitalize: null,
-	    autoCorrect: null,
+	    autoCapitalize: MUST_USE_ATTRIBUTE,
+	    autoCorrect: MUST_USE_ATTRIBUTE,
 	    // autoSave allows WebKit/Blink to persist values of input fields on page reloads
 	    autoSave: null,
 	    // color is for Safari mask-icon link
@@ -10534,9 +10535,7 @@
 	    httpEquiv: 'http-equiv'
 	  },
 	  DOMPropertyNames: {
-	    autoCapitalize: 'autocapitalize',
 	    autoComplete: 'autocomplete',
-	    autoCorrect: 'autocorrect',
 	    autoFocus: 'autofocus',
 	    autoPlay: 'autoplay',
 	    autoSave: 'autosave',
@@ -13615,7 +13614,7 @@
 	    var value = LinkedValueUtils.getValue(props);
 
 	    if (value != null) {
-	      updateOptions(this, props, value);
+	      updateOptions(this, Boolean(props.multiple), value);
 	    }
 	  }
 	}
@@ -16650,11 +16649,14 @@
 	 * @typechecks
 	 */
 
+	/* eslint-disable fb-www/typeof-undefined */
+
 	/**
 	 * Same as document.activeElement but wraps in a try-catch block. In IE it is
 	 * not safe to call document.activeElement if there is nothing focused.
 	 *
-	 * The activeElement will be null only if the document or document body is not yet defined.
+	 * The activeElement will be null only if the document or document body is not
+	 * yet defined.
 	 */
 	'use strict';
 
@@ -16662,7 +16664,6 @@
 	  if (typeof document === 'undefined') {
 	    return null;
 	  }
-
 	  try {
 	    return document.activeElement || document.body;
 	  } catch (e) {
@@ -18402,7 +18403,9 @@
 	  'setValueForProperty': 'update attribute',
 	  'setValueForAttribute': 'update attribute',
 	  'deleteValueForProperty': 'remove attribute',
-	  'dangerouslyReplaceNodeWithMarkupByID': 'replace'
+	  'setValueForStyles': 'update styles',
+	  'replaceNodeWithMarkup': 'replace',
+	  'updateTextContent': 'set textContent'
 	};
 
 	function getTotalTime(measurements) {
@@ -18594,18 +18597,23 @@
 	'use strict';
 
 	var performance = __webpack_require__(145);
-	var curPerformance = performance;
+
+	var performanceNow;
 
 	/**
 	 * Detect if we can use `window.performance.now()` and gracefully fallback to
 	 * `Date.now()` if it doesn't exist. We need to support Firefox < 15 for now
 	 * because of Facebook's testing infrastructure.
 	 */
-	if (!curPerformance || !curPerformance.now) {
-	  curPerformance = Date;
+	if (performance.now) {
+	  performanceNow = function () {
+	    return performance.now();
+	  };
+	} else {
+	  performanceNow = function () {
+	    return Date.now();
+	  };
 	}
-
-	var performanceNow = curPerformance.now.bind(curPerformance);
 
 	module.exports = performanceNow;
 
@@ -18654,7 +18662,7 @@
 
 	'use strict';
 
-	module.exports = '0.14.3';
+	module.exports = '0.14.6';
 
 /***/ },
 /* 147 */
@@ -19040,6 +19048,7 @@
 		//Get playlist with including items
 		getPlaylist: function (id) {
 			var movies;
+			console.log(id);
 			api.get_playlist(id).then(function (items) {
 				items.map(function (movie) {
 					store.items = [];
@@ -21482,9 +21491,9 @@
 
 		render: function () {
 			if (!this.state.list) return false;
-			var items = this.state.list.map((function (item) {
+			var items = this.state.list.map(function (item) {
 				return React.createElement(Item, { movie: item.movie, key: item.movie.ids.trakt, toggle: this.toggleSelector.bind(this, item.movie.ids.trakt) });
-			}).bind(this));
+			}.bind(this));
 			return React.createElement(
 				'div',
 				{ className: 'movielist' },
@@ -21707,6 +21716,7 @@
 			this.setState({ showCreator: !this.state.showCreator });
 		},
 		_showViewer: function (id) {
+			console.log(id);
 			actions.getPlaylist(id);
 			this.setState(SearchStore.getPlaylist());
 			this.setState({ showViewer: !this.state.showViewer });
@@ -21718,9 +21728,9 @@
 				width: '80%',
 				paddingLeft: '10%'
 			};
-			var userlists = this.state.playlists.map((function (item) {
+			var userlists = this.state.playlists.map(function (item) {
 				return React.createElement(PlaylistItem, { showViewer: this._showViewer.bind(this, item.id), playlist: item });
-			}).bind(this));
+			}.bind(this));
 			return React.createElement(
 				'div',
 				{ id: 'playlist-container' },
@@ -21733,9 +21743,9 @@
 						' Playlists '
 					)
 				),
-				this.state.playlists.map((function (item) {
+				this.state.playlists.map(function (item) {
 					return React.createElement(PlaylistItem, { showViewer: this._showViewer.bind(this, item.id), playlist: item });
-				}).bind(this)),
+				}.bind(this)),
 				React.createElement(
 					'a',
 					{ href: '#', id: 'create-playlist', onClick: this._playlistCreator },
@@ -21863,16 +21873,16 @@
 		displayName: 'PlaylistViewer',
 
 		render: function () {
-			var movieArray = this.props.items.map((function (movie) {
+			var movieArray = this.props.items.map(function (movie) {
 				movie.title = movie[0].movie.title;
 				movie.poster = movie[0].movie.images.poster.full;
 				movie.image = movie[0].movie.images.fanart.full;
 				return movie;
-			}).bind(this));
+			}.bind(this));
 			return React.createElement(
 				'div',
 				{ id: 'playlistViewer' },
-				movieArray.map((function (movie) {
+				movieArray.map(function (movie) {
 					var style = { backgroundImage: 'url(' + movie.image + ')' };
 					return React.createElement(
 						'div',
@@ -21886,7 +21896,7 @@
 							' '
 						)
 					);
-				}).bind(this)),
+				}.bind(this)),
 				React.createElement(
 					'li',
 					{ id: 'viewerClose', onClick: this.props.close },

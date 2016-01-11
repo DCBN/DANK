@@ -94,6 +94,7 @@ var actions = {
 	//Get playlist with including items
 	getPlaylist: function(id){
 		var movies;
+		console.log(id);
 		api.get_playlist(id)
 		.then(function(items){
 			items.map(function(movie){
